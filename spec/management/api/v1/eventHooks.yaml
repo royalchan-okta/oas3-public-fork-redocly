@@ -1,0 +1,179 @@
+openapi: 3.0.1
+info:
+  title: Eventhooks API
+  description: Eventhooks API
+  version: 1.0.0
+paths:
+  /api/v1/eventHooks:
+    get:
+      tags:
+      - EventHook
+      description: Success
+      operationId: listEventHooks
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '../../components/EventHook.yaml#/components/schemas/EventHook'
+      security:
+      - api_token: []
+    post:
+      tags:
+      - EventHook
+      description: Success
+      operationId: createEventHook
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '../../components/EventHook.yaml#/components/schemas/EventHook'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/EventHook.yaml#/components/schemas/EventHook'
+      security:
+      - api_token: []
+      x-okta-request-body-name: eventHook
+  /api/v1/eventHooks/{eventHookId}:
+    get:
+      tags:
+      - EventHook
+      description: Success
+      operationId: getEventHook
+      parameters:
+      - name: eventHookId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/EventHook.yaml#/components/schemas/EventHook'
+      security:
+      - api_token: []
+    put:
+      tags:
+      - EventHook
+      description: Success
+      operationId: updateEventHook
+      parameters:
+      - name: eventHookId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '../../components/EventHook.yaml#/components/schemas/EventHook'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/EventHook.yaml#/components/schemas/EventHook'
+      security:
+      - api_token: []
+      x-okta-request-body-name: eventHook
+    delete:
+      tags:
+      - EventHook
+      description: Success
+      operationId: deleteEventHook
+      parameters:
+      - name: eventHookId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: No Content
+          content: {}
+      security:
+      - api_token: []
+  /api/v1/eventHooks/{eventHookId}/lifecycle/activate:
+    post:
+      tags:
+      - EventHook
+      description: Success
+      operationId: activateEventHook
+      parameters:
+      - name: eventHookId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/EventHook.yaml#/components/schemas/EventHook'
+      security:
+      - api_token: []
+  /api/v1/eventHooks/{eventHookId}/lifecycle/deactivate:
+    post:
+      tags:
+      - EventHook
+      description: Success
+      operationId: deactivateEventHook
+      parameters:
+      - name: eventHookId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/EventHook.yaml#/components/schemas/EventHook'
+      security:
+      - api_token: []
+  /api/v1/eventHooks/{eventHookId}/lifecycle/verify:
+    post:
+      tags:
+      - EventHook
+      description: Success
+      operationId: verifyEventHook
+      parameters:
+      - name: eventHookId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/EventHook.yaml#/components/schemas/EventHook'
+      security:
+      - api_token: []
+components:
+  securitySchemes:
+    api_token:
+      type: apiKey
+      description: SSWS {API Token}
+      name: Authorization
+      in: header

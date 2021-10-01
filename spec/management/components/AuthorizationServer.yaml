@@ -1,0 +1,327 @@
+openapi: 3.0.1
+info:
+  title: Authorization Server Components
+  version: 1.0.0
+paths: {}
+components:
+  schemas:
+    ApplicationCredentialsSigningUse:
+      type: string
+      enum:
+      - sig
+      x-okta-tags:
+      - AuthorizationServer
+    AuthorizationServer:
+      type: object
+      properties:
+        _links:
+          type: object
+          additionalProperties:
+            type: object
+            properties: {}
+          readOnly: true
+        audiences:
+          type: array
+          items:
+            type: string
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        credentials:
+          $ref: './Application.yaml#/components/schemas/AuthorizationServerCredentials'
+        description:
+          type: string
+        id:
+          type: string
+          readOnly: true
+        issuer:
+          type: string
+        issuerMode:
+          type: string
+          enum:
+          - ORG_URL
+          - CUSTOM_URL
+        lastUpdated:
+          type: string
+          format: date-time
+          readOnly: true
+        name:
+          type: string
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - INACTIVE
+      x-okta-crud:
+      - alias: create
+        arguments:
+        - dest: authorizationServer
+          self: true
+        operationId: createAuthorizationServer
+      - alias: read
+        arguments: []
+        operationId: getAuthorizationServer
+      - alias: update
+        arguments:
+        - dest: authServerId
+          src: id
+        - dest: authorizationServer
+          self: true
+        operationId: updateAuthorizationServer
+      - alias: delete
+        arguments:
+        - dest: authServerId
+          src: id
+        - dest: authorizationServer
+          self: true
+        operationId: deleteAuthorizationServer
+      x-okta-operations:
+      - alias: listOAuth2Claims
+        arguments:
+        - dest: authServerId
+          src: id
+        operationId: listOAuth2Claims
+      - alias: createOAuth2Claim
+        arguments:
+        - dest: authServerId
+          src: id
+        operationId: createOAuth2Claim
+      - alias: deleteOAuth2Claim
+        arguments:
+        - dest: authServerId
+          src: id
+        operationId: deleteOAuth2Claim
+      - alias: getOAuth2Claim
+        arguments:
+        - dest: authServerId
+          src: id
+        operationId: getOAuth2Claim
+      - alias: updateOAuth2Claim
+        arguments:
+        - dest: authServerId
+          src: id
+        operationId: updateOAuth2Claim
+      - alias: listOAuth2Clients
+        arguments:
+        - dest: authServerId
+          src: id
+        operationId: listOAuth2ClientsForAuthorizationServer
+      - alias: revokeRefreshTokensForClient
+        arguments:
+        - dest: authServerId
+          src: id
+        operationId: revokeRefreshTokensForAuthorizationServerAndClient
+      - alias: listRefreshTokensForClient
+        arguments:
+        - dest: authServerId
+          src: id
+        operationId: listRefreshTokensForAuthorizationServerAndClient
+      - alias: getRefreshTokenForClient
+        arguments:
+        - dest: authServerId
+          src: id
+        operationId: getRefreshTokenForAuthorizationServerAndClient
+      - alias: revokeRefreshTokenForClient
+        arguments:
+        - dest: authServerId
+          src: id
+        operationId: revokeRefreshTokenForAuthorizationServerAndClient
+      - alias: listKeys
+        arguments:
+        - dest: authServerId
+          src: id
+        operationId: listAuthorizationServerKeys
+      - alias: rotateKeys
+        arguments:
+        - dest: authServerId
+          src: id
+        operationId: rotateAuthorizationServerKeys
+      - alias: activate
+        arguments:
+        - dest: authServerId
+          src: id
+        operationId: activateAuthorizationServer
+      - alias: deactivate
+        arguments:
+        - dest: authServerId
+          src: id
+        operationId: deactivateAuthorizationServer
+      - alias: listPolicies
+        arguments:
+        - dest: authServerId
+          src: id
+        operationId: listAuthorizationServerPolicies
+      - alias: createPolicy
+        arguments:
+        - dest: authServerId
+          src: id
+        operationId: createAuthorizationServerPolicy
+      - alias: deletePolicy
+        arguments:
+        - dest: authServerId
+          src: id
+        operationId: deleteAuthorizationServerPolicy
+      - alias: getPolicy
+        arguments:
+        - dest: authServerId
+          src: id
+        operationId: getAuthorizationServerPolicy
+      - alias: updatePolicy
+        arguments:
+        - dest: authServerId
+          src: id
+        operationId: updateAuthorizationServerPolicy
+      - alias: listOAuth2Scopes
+        arguments:
+        - dest: authServerId
+          src: id
+        operationId: listOAuth2Scopes
+      - alias: createOAuth2Scope
+        arguments:
+        - dest: authServerId
+          src: id
+        operationId: createOAuth2Scope
+      - alias: deleteOAuth2Scope
+        arguments:
+        - dest: authServerId
+          src: id
+        operationId: deleteOAuth2Scope
+      - alias: getOAuth2Scope
+        arguments:
+        - dest: authServerId
+          src: id
+        operationId: getOAuth2Scope
+      - alias: updateOAuth2Scope
+        arguments:
+        - dest: authServerId
+          src: id
+        operationId: updateOAuth2Scope
+      x-okta-tags:
+      - AuthorizationServer
+    AuthorizationServerCredentialsRotationMode:
+      type: string
+      enum:
+      - AUTO
+      - MANUAL
+      x-okta-tags:
+      - AuthorizationServer
+    AuthorizationServerCredentialsSigningConfig:
+      type: object
+      properties:
+        kid:
+          type: string
+        lastRotated:
+          type: string
+          format: date-time
+          readOnly: true
+        nextRotation:
+          type: string
+          format: date-time
+          readOnly: true
+        rotationMode:
+          $ref: '#/components/schemas/AuthorizationServerCredentialsRotationMode'
+        use:
+          $ref: '#/components/schemas/AuthorizationServerCredentialsUse'
+      x-okta-tags:
+      - AuthorizationServer
+    AuthorizationServerCredentialsUse:
+      type: string
+      enum:
+      - sig
+      x-okta-tags:
+      - AuthorizationServer
+    AuthorizationServerPolicy:
+      type: object
+      properties:
+        _embedded:
+          type: object
+          additionalProperties:
+            type: object
+            properties: {}
+          readOnly: true
+        _links:
+          type: object
+          additionalProperties:
+            type: object
+            properties: {}
+          readOnly: true
+        conditions:
+          $ref: './Policy.yaml#/components/schemas/PolicyRuleConditions'
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        description:
+          type: string
+        id:
+          type: string
+          readOnly: true
+        lastUpdated:
+          type: string
+          format: date-time
+          readOnly: true
+        name:
+          type: string
+        priority:
+          type: integer
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - INACTIVE
+        system:
+          type: boolean
+        type:
+          $ref: './Policy.yaml#/components/schemas/PolicyType'
+      x-okta-crud:
+      - alias: read
+        arguments:
+        - dest: policyId
+          src: id
+        operationId: getAuthorizationServerPolicy
+      - alias: update
+        arguments:
+        - dest: policyId
+          src: id
+        - dest: policy
+          self: true
+        operationId: updateAuthorizationServerPolicy
+      - alias: delete
+        arguments:
+        - dest: policyId
+          src: id
+        operationId: deleteAuthorizationServerPolicy
+      x-okta-operations:
+      - alias: listPolicyRules
+        arguments:
+        - dest: policyId
+          src: id
+        operationId: listAuthorizationServerPolicyRules
+      - alias: createPolicyRule
+        arguments:
+        - dest: policyId
+          src: id
+        operationId: createAuthorizationServerPolicyRule
+      - alias: getPolicyRule
+        arguments:
+        - dest: policyId
+          src: id
+        operationId: getAuthorizationServerPolicyRule
+      - alias: deletePolicyRule
+        arguments:
+        - dest: policyId
+          src: id
+        operationId: deleteAuthorizationServerPolicyRule
+      - alias: activate
+        arguments:
+        - dest: policyId
+          src: id
+        operationId: activateAuthorizationServerPolicy
+      - alias: deactivate
+        arguments:
+        - dest: policyId
+          src: id
+        operationId: deactivateAuthorizationServerPolicy
+      x-okta-tags:
+      - AuthorizationServer

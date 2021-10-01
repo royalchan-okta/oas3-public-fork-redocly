@@ -1,0 +1,119 @@
+openapi: 3.0.1
+info:
+  title: Session Components
+  version: 1.0.0
+paths: {}
+components:
+  schemas:
+    CreateSessionRequest:
+      type: object
+      properties:
+        sessionToken:
+          type: string
+      x-okta-tags:
+      - Session
+    Session:
+      type: object
+      properties:
+        _links:
+          type: object
+          additionalProperties:
+            type: object
+            properties: {}
+          readOnly: true
+        amr:
+          type: array
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/SessionAuthenticationMethod'
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        expiresAt:
+          type: string
+          format: date-time
+          readOnly: true
+        id:
+          type: string
+          readOnly: true
+        idp:
+          $ref: '#/components/schemas/SessionIdentityProvider'
+        lastFactorVerification:
+          type: string
+          format: date-time
+          readOnly: true
+        lastPasswordVerification:
+          type: string
+          format: date-time
+          readOnly: true
+        login:
+          type: string
+          readOnly: true
+        status:
+          $ref: '#/components/schemas/SessionStatus'
+        userId:
+          type: string
+          readOnly: true
+      x-okta-crud:
+      - alias: read
+        arguments:
+        - dest: sessionId
+          src: id
+        operationId: getSession
+      - alias: delete
+        arguments:
+        - dest: sessionId
+          src: id
+        operationId: endSession
+      x-okta-operations:
+      - alias: refresh
+        arguments:
+        - dest: sessionId
+          src: id
+        operationId: refreshSession
+      x-okta-tags:
+      - Session
+    SessionAuthenticationMethod:
+      type: string
+      enum:
+      - pwd
+      - swk
+      - hwk
+      - otp
+      - sms
+      - tel
+      - geo
+      - fpt
+      - kba
+      - mfa
+      x-okta-tags:
+      - Session
+    SessionIdentityProvider:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        type:
+          $ref: '#/components/schemas/SessionIdentityProviderType'
+      x-okta-tags:
+      - Session
+    SessionIdentityProviderType:
+      type: string
+      enum:
+      - ACTIVE_DIRECTORY
+      - LDAP
+      - OKTA
+      - FEDERATION
+      - SOCIAL
+      x-okta-tags:
+      - Session
+    SessionStatus:
+      type: string
+      enum:
+      - ACTIVE
+      - MFA_ENROLL
+      - MFA_REQUIRED
+      x-okta-tags:
+      - Session

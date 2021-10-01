@@ -1,0 +1,63 @@
+openapi: 3.0.1
+info:
+  title: Common Components
+  version: 1.0.0
+paths: {}
+components:
+  schemas:
+    EnabledStatus:
+      type: string
+      enum:
+      - ENABLED
+      - DISABLED
+      x-okta-tags:
+      - Common
+    Error:
+      title: Error
+      type: object
+      properties:
+        errorCode:
+          type: string
+          description: An Okta code for this type of error
+        errorSummary:
+          type: string
+          description: A short description of what caused this error. Sometimes this
+            contains dynamically-generated information about your specific error.
+        errorLink:
+          type: string
+          description: An Okta code for this type of error
+        errorId:
+          type: string
+          description: A unique identifier for this error. This can be used by Okta
+            Support to help with troubleshooting.
+        errorCauses:
+          type: array
+          items:
+            type: object
+            properties:
+              errorSummary:
+                type: string
+      x-okta-tags:
+      - Common
+    HrefObject:
+      title: hrefObject
+      type: object
+      description: Used for links
+      x-examples: {}
+      properties:
+        href:
+          type: string
+        hints:
+          type: object
+          properties:
+            allow:
+              type: array
+              items:
+                type: string
+                enum:
+                - GET
+                - PUT
+                - DELETE
+                - POST
+      x-okta-tags:
+      - Common

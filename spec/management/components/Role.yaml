@@ -1,0 +1,98 @@
+openapi: 3.0.1
+info:
+  title: Role Components
+  version: 1.0.0
+paths: {}
+components:
+  schemas:
+    AssignRoleRequest:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/RoleType'
+      x-okta-tags:
+      - Role
+    CatalogApplication:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        name:
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        status:
+          $ref: '#/components/schemas/CatalogApplicationStatus'
+        lastUpdated:
+          type: string
+          format: date-time
+          readOnly: true
+        category:
+          type: string
+        verificationStatus:
+          type: string
+        website:
+          type: string
+        signOnModes:
+          type: array
+          items:
+            type: string
+        features:
+          type: array
+          items:
+            type: string
+        _links:
+          type: object
+          additionalProperties:
+            type: object
+            properties: {}
+          readOnly: true
+      x-okta-tags:
+      - Role
+    CatalogApplicationStatus:
+      type: string
+      enum:
+      - ACTIVE
+      - INACTIVE
+      x-okta-tags:
+      - Role
+    RoleAssignmentType:
+      type: string
+      enum:
+      - GROUP
+      - USER
+      x-okta-tags:
+      - Role
+    RoleType:
+      type: string
+      enum:
+      - SUPER_ADMIN
+      - ORG_ADMIN
+      - APP_ADMIN
+      - USER_ADMIN
+      - HELP_DESK_ADMIN
+      - READ_ONLY_ADMIN
+      - MOBILE_ADMIN
+      - API_ACCESS_MANAGEMENT_ADMIN
+      - REPORT_ADMIN
+      x-okta-tags:
+      - Role
+    Scope:
+      type: object
+      properties:
+        stringValue:
+          type: string
+        type:
+          $ref: '#/components/schemas/ScopeType'
+      x-okta-tags:
+      - Role
+    ScopeType:
+      type: string
+      enum:
+      - CORS
+      - REDIRECT
+      x-okta-tags:
+      - Role

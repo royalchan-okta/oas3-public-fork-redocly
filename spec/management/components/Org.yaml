@@ -1,0 +1,175 @@
+openapi: 3.0.1
+info:
+  title: Org Components
+  version: 1.0.0
+paths: {}
+components:
+  schemas:
+    OrgOktaCommunicationSetting:
+      properties:
+        _links:
+          additionalProperties:
+            type: object
+        optOutEmailUsers:
+          type: boolean
+          readOnly: true
+      type: object
+      x-okta-operations:
+      - alias: optInUsersToOktaCommunicationEmails
+        operationId: optInUsersToOktaCommunicationEmails
+      - alias: optOutUsersFromOktaCommunicationEmails
+        operationId: optOutUsersFromOktaCommunicationEmails
+      x-okta-tags:
+      - Org
+    OrgContactTypeObj:
+      properties:
+        _links:
+          additionalProperties:
+            type: object
+        contactType:
+          $ref: '#/components/schemas/OrgContactType'
+      type: object
+      x-okta-crud:
+      - alias: read
+        arguments: []
+        operationId: getOrgContactTypes
+      x-okta-tags:
+      - Org
+    OrgContactType:
+      enum:
+      - BILLING
+      - TECHNICAL
+      type: string
+      x-okta-tags:
+      - Org
+    OrgContactUser:
+      properties:
+        _links:
+          additionalProperties:
+            type: object
+          readOnly: true
+          type: object
+        userId:
+          type: string
+      type: object
+      x-okta-operations:
+      - alias: updateContactUser
+        arguments:
+          - dest: userId
+            src: userId
+        operationId: updateOrgContactUser
+      x-okta-tags:
+      - Org
+    OrgSetting:
+      properties:
+        _links:
+          additionalProperties:
+            type: object
+        address1:
+          type: string
+        address2:
+          type: string
+        city:
+          type: string
+        companyName:
+          type: string
+        country:
+          type: string
+        created:
+          format: date-time
+          readOnly: true
+          type: string
+        endUserSupportHelpURL:
+          type: string
+        expiresAt:
+          format: date-time
+          readOnly: true
+          type: string
+        id:
+          readOnly: true
+          type: string
+        lastUpdated:
+          format: date-time
+          readOnly: true
+          type: string
+        phoneNumber:
+          type: string
+        postalCode:
+          type: string
+        state:
+          type: string
+        status:
+          readOnly: true
+          type: string
+        subdomain:
+          readOnly: true
+          type: string
+        supportPhoneNumber:
+          type: string
+        website:
+          type: string
+      type: object
+      x-okta-crud:
+      - alias: update
+        arguments:
+          - dest: orgSetting
+            self: true
+        operationId: updateOrgSetting
+      - alias: partialUpdate
+        arguments:
+          - dest: orgSetting
+            self: true
+        operationId: partialUpdateOrgSetting
+      x-okta-tags:
+      - Org
+    OrgOktaSupportSetting:
+      enum:
+      - DISABLED
+      - ENABLED
+      type: string
+      x-okta-tags:
+      - Org
+    OrgOktaSupportSettingsObj:
+      properties:
+        _links:
+          additionalProperties:
+            type: object
+        expiration:
+          format: date-time
+          type: string
+          readOnly: true
+        support:
+          $ref: '#/components/schemas/OrgOktaSupportSetting'
+      type: object
+      x-okta-operations:
+      - alias: extendOktaSupport
+        operationId: extendOktaSupport
+      - alias: grantOktaSupport
+        operationId: grantOktaSupport
+      - alias: revokeOktaSupport
+        operationId: revokeOktaSupport
+      x-okta-tags:
+      - Org
+    OrgPreferences:
+      properties:
+        _links:
+          additionalProperties:
+            type: object
+        showEndUserFooter:
+          type: boolean
+          readOnly: true
+      type: object
+      x-okta-operations:
+      - alias: hideEndUserFooter
+        operationId: hideOktaUIFooter
+      - alias: showEndUserFooter
+        operationId: showOktaUIFooter
+      x-okta-tags:
+      - Org
+    UserIdString:
+      properties:
+        userId:
+          type: string
+      type: object
+      x-okta-tags:
+      - Org

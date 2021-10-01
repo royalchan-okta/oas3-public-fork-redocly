@@ -1,0 +1,363 @@
+openapi: 3.0.1
+info:
+  title: Meta API
+  description: Meta API
+  version: 1.0.0
+paths:
+  /api/v1/meta/schemas/apps/{appInstanceId}/default:
+    get:
+      tags:
+      - UserSchema
+      summary: Fetches the Schema for an App User
+      description: Fetches the Schema for an App User
+      operationId: getApplicationUserSchema
+      parameters:
+      - name: appInstanceId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/UserSchema.yaml#/components/schemas/UserSchema'
+      security:
+      - api_token: []
+    post:
+      tags:
+      - UserSchema
+      summary: Partial updates on the User Profile properties of the Application User
+        Schema.
+      description: Partial updates on the User Profile properties of the Application
+        User Schema.
+      operationId: updateApplicationUserProfile
+      parameters:
+      - name: appInstanceId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '../../components/UserSchema.yaml#/components/schemas/UserSchema'
+        required: false
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/UserSchema.yaml#/components/schemas/UserSchema'
+      security:
+      - api_token: []
+      x-okta-request-body-name: body
+  /api/v1/meta/schemas/group/default:
+    get:
+      description: Fetches the group schema
+      operationId: getGroupSchema
+      parameters: []
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/GroupSchema.yaml#/components/schemas/GroupSchema'
+      security:
+      - api_token: []
+      summary: Fetches the group schema
+      tags:
+      - GroupSchema
+    post:
+      description: Updates, adds ore removes one or more custom Group Profile properties in
+        the schema
+      operationId: updateGroupSchema
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '../../components/GroupSchema.yaml#/components/schemas/GroupSchema'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/GroupSchema.yaml#/components/schemas/GroupSchema'
+      security:
+      - api_token: []
+      summary: Updates, adds ore removes one or more custom Group Profile properties in
+        the schema
+      tags:
+      - GroupSchema
+  /api/v1/meta/schemas/user/{schemaId}:
+    get:
+      tags:
+      - UserSchema
+      summary: Fetches the schema for a Schema Id.
+      description: Fetches the schema for a Schema Id.
+      operationId: getUserSchema
+      parameters:
+      - name: schemaId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/UserSchema.yaml#/components/schemas/UserSchema'
+      security:
+      - api_token: []
+    post:
+      tags:
+      - UserSchema
+      description: Partial updates on the User Profile properties of the user schema.
+      operationId: updateUserProfile
+      parameters:
+      - name: schemaId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '../../components/UserSchema.yaml#/components/schemas/UserSchema'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/UserSchema.yaml#/components/schemas/UserSchema'
+      security:
+      - api_token: []
+      x-okta-request-body-name: userSchema
+  /api/v1/meta/schemas/user/linkedObjects:
+    get:
+      tags:
+      - LinkedObject
+      description: Success
+      operationId: listLinkedObjectDefinitions
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '../../components/LinkedObject.yaml#/components/schemas/LinkedObject'
+      security:
+      - api_token: []
+    post:
+      tags:
+      - LinkedObject
+      description: Success
+      operationId: addLinkedObjectDefinition
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '../../components/LinkedObject.yaml#/components/schemas/LinkedObject'
+        required: true
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/LinkedObject.yaml#/components/schemas/LinkedObject'
+      security:
+      - api_token: []
+      x-okta-request-body-name: linkedObject
+  /api/v1/meta/schemas/user/linkedObjects/{linkedObjectName}:
+    get:
+      tags:
+      - LinkedObject
+      description: Success
+      operationId: getLinkedObjectDefinition
+      parameters:
+      - name: linkedObjectName
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/LinkedObject.yaml#/components/schemas/LinkedObject'
+      security:
+      - api_token: []
+    delete:
+      tags:
+      - LinkedObject
+      description: Success
+      operationId: deleteLinkedObjectDefinition
+      parameters:
+      - name: linkedObjectName
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: No Content
+          content: {}
+      security:
+      - api_token: []
+  /api/v1/meta/types/user:
+    get:
+      tags:
+      - UserType
+      description: Fetches all User Types in your org
+      operationId: listUserTypes
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '../../components/UserType.yaml#/components/schemas/UserType'
+      security:
+      - api_token: []
+    post:
+      tags:
+      - UserType
+      description: Creates a new User Type. A default User Type is automatically created
+        along with your org, and you may add another 9 User Types for a maximum of
+        10.
+      operationId: createUserType
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '../../components/UserType.yaml#/components/schemas/UserType'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/UserType.yaml#/components/schemas/UserType'
+      security:
+      - api_token: []
+      x-okta-request-body-name: userType
+  /api/v1/meta/types/user/{typeId}:
+    get:
+      tags:
+      - UserType
+      description: Fetches a User Type by ID. The special identifier `default` may
+        be used to fetch the default User Type.
+      operationId: getUserType
+      parameters:
+      - name: typeId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/UserType.yaml#/components/schemas/UserType'
+      security:
+      - api_token: []
+    put:
+      tags:
+      - UserType
+      description: Replace an existing User Type
+      operationId: replaceUserType
+      parameters:
+      - name: typeId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '../../components/UserType.yaml#/components/schemas/UserType'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/UserType.yaml#/components/schemas/UserType'
+      security:
+      - api_token: []
+      x-okta-request-body-name: userType
+    post:
+      tags:
+      - UserType
+      description: Updates an existing User Type
+      operationId: updateUserType
+      parameters:
+      - name: typeId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '../../components/UserType.yaml#/components/schemas/UserType'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/UserType.yaml#/components/schemas/UserType'
+      security:
+      - api_token: []
+      x-okta-request-body-name: userType
+    delete:
+      tags:
+      - UserType
+      description: Deletes a User Type permanently. This operation is not permitted
+        for the default type, nor for any User Type that has existing users
+      operationId: deleteUserType
+      parameters:
+      - name: typeId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: No Content
+          content: {}
+      security:
+      - api_token: []
+components:
+  securitySchemes:
+    api_token:
+      type: apiKey
+      description: SSWS {API Token}
+      name: Authorization
+      in: header

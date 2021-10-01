@@ -1,0 +1,89 @@
+openapi: 3.0.1
+info:
+  title: Authenticators API
+  description: Authenticators API
+  version: 1.0.0
+paths:
+  /api/v1/authenticators:
+    get:
+      summary:  List Authenticators
+      description: Enumerates authenticators in your organization.
+      operationId: listAuthenticators
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '../../components/Authenticator.yaml#/components/schemas/Authenticator'
+                type: array
+      security:
+      - api_token: []
+      tags:
+      - Authenticator
+  /api/v1/authenticators/{authenticatorId}:
+    get:
+      summary: Get Authenticator
+      description: Fetches an authenticator from your Okta organization by `authenticatorId`.
+      operationId: getAuthenticator
+      parameters:
+      - in: path
+        name: authenticatorId
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/Authenticator.yaml#/components/schemas/Authenticator'
+      security:
+      - api_token: []
+      tags:
+      - Authenticator
+  /api/v1/authenticators/{authenticatorId}/lifecycle/activate:
+    post:
+      summary: Activate Authenticator
+      description: Activates an authenticator by `authenticatorId`.
+      operationId: activateAuthenticator
+      parameters:
+      - in: path
+        name: authenticatorId
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+      security:
+      - api_token: []
+      tags:
+      - Authenticator
+  /api/v1/authenticators/{authenticatorId}/lifecycle/deactivate:
+    post:
+      summary: Deactivate Authenticator
+      description: Deactivates an authenticator by `authenticatorId`.
+      operationId: deactivateAuthenticator
+      parameters:
+      - in: path
+        name: authenticatorId
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+      security:
+      - api_token: []
+      tags:
+      - Authenticator
+components:
+  securitySchemes:
+    api_token:
+      type: apiKey
+      description: SSWS {API Token}
+      name: Authorization
+      in: header

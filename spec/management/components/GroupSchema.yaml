@@ -1,0 +1,140 @@
+openapi: 3.0.1
+info:
+  title: Group Schema Components
+  version: 1.0.0
+paths: {}
+components:
+  schemas:
+    GroupSchema:
+      properties:
+        '$schema':
+          readOnly: true
+          type: string
+        _links:
+          additionalProperties:
+            type: object
+          readOnly: true
+          type: object
+        created:
+          readOnly: true
+          type: string
+        definitions:
+          $ref: '#/components/schemas/GroupSchemaDefinitions'
+        description:
+          type: string
+        id:
+          readOnly: true
+          type: string
+        lastUpdated:
+          readOnly: true
+          type: string
+        name:
+          readOnly: true
+          type: string
+        properties:
+          $ref: './UserSchema.yaml#/components/schemas/UserSchemaProperties'
+        title:
+          type: string
+        type:
+          readOnly: true
+          type: string
+      type: object
+      x-okta-tags:
+      - GroupSchema
+    GroupSchemaAttribute:
+      properties:
+        description:
+          type: string
+        enum:
+          items:
+            type: string
+          type: array
+        externalName:
+          type: string
+        externalNamespace:
+          type: string
+        items:
+          $ref: './UserSchema.yaml#/components/schemas/UserSchemaAttributeItems'
+        master:
+          $ref: './UserSchema.yaml#/components/schemas/UserSchemaAttributeMaster'
+        maxLength:
+          type: integer
+        minLength:
+          type: integer
+        mutability:
+          type: string
+        oneOf:
+          items:
+            $ref: './UserSchema.yaml#/components/schemas/UserSchemaAttributeEnum'
+          type: array
+        permissions:
+          items:
+            $ref: './UserSchema.yaml#/components/schemas/UserSchemaAttributePermission'
+          type: array
+        required:
+          type: boolean
+        scope:
+          $ref: './UserSchema.yaml#/components/schemas/UserSchemaAttributeScope'
+        title:
+          type: string
+        type:
+          $ref: './UserSchema.yaml#/components/schemas/UserSchemaAttributeType'
+        union:
+          $ref: './UserSchema.yaml#/components/schemas/UserSchemaAttributeUnion'
+        unique:
+          type: string
+      type: object
+      x-okta-tags:
+      - GroupSchema
+    GroupSchemaBase:
+      properties:
+        id:
+          readOnly: true
+          type: string
+        properties:
+          $ref: '#/components/schemas/GroupSchemaBaseProperties'
+        required:
+          items:
+            type: string
+          type: array
+        type:
+          type: string
+      type: object
+      x-okta-tags:
+      - GroupSchema
+    GroupSchemaBaseProperties:
+      properties:
+        description:
+          $ref: '#/components/schemas/GroupSchemaAttribute'
+        name:
+          $ref: '#/components/schemas/GroupSchemaAttribute'
+      type: object
+      x-okta-tags:
+      - GroupSchema
+    GroupSchemaCustom:
+      properties:
+        id:
+          readOnly: true
+          type: string
+        properties:
+          additionalProperties:
+            $ref: '#/components/schemas/GroupSchemaAttribute'
+          type: object
+        required:
+          items:
+            type: string
+          type: array
+        type:
+          type: string
+      type: object
+      x-okta-tags:
+      - GroupSchema
+    GroupSchemaDefinitions:
+      properties:
+        base:
+          $ref: '#/components/schemas/GroupSchemaBase'
+        custom:
+          $ref: '#/components/schemas/GroupSchemaCustom'
+      type: object
+      x-okta-tags:
+      - GroupSchema

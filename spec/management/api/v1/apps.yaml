@@ -1,0 +1,1000 @@
+openapi: 3.0.1
+info:
+  title: Apps API
+  description: Apps API
+  version: 1.0.0
+paths:
+  /api/v1/apps:
+    get:
+      tags:
+      - Application
+      summary: List Applications
+      description: Enumerates apps added to your organization with pagination. A subset
+        of apps can be returned that match a supported filter expression or query.
+      operationId: listApplications
+      parameters:
+      - name: q
+        in: query
+        schema:
+          type: string
+      - name: after
+        in: query
+        description: Specifies the pagination cursor for the next page of apps
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Specifies the number of results for a page
+        schema:
+          type: integer
+          format: int32
+          default: -1
+      - name: filter
+        in: query
+        description: Filters apps by status, user.id, group.id or credentials.signing.kid
+          expression
+        schema:
+          type: string
+      - name: expand
+        in: query
+        description: Traverses users link relationship and optionally embeds Application
+          User resource
+        schema:
+          type: string
+      - name: includeNonDeleted
+        in: query
+        schema:
+          type: boolean
+          default: false
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '../../components/Application.yaml#/components/schemas/Application'
+      security:
+      - api_token: []
+    post:
+      tags:
+      - Application
+      summary: Add Application
+      description: Adds a new application to your Okta organization.
+      operationId: createApplication
+      parameters:
+      - name: activate
+        in: query
+        description: Executes activation lifecycle operation when creating the app
+        schema:
+          type: boolean
+          default: true
+      - name: OktaAccessGateway-Agent
+        in: header
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '../../components/Application.yaml#/components/schemas/Application'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/Application.yaml#/components/schemas/Application'
+      security:
+      - api_token: []
+      x-okta-request-body-name: application
+  /api/v1/apps/{appId}:
+    get:
+      tags:
+      - Application
+      summary: Get Application
+      description: Fetches an application from your Okta organization by `id`.
+      operationId: getApplication
+      parameters:
+      - name: appId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: expand
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/Application.yaml#/components/schemas/Application'
+      security:
+      - api_token: []
+    put:
+      tags:
+      - Application
+      summary: Update Application
+      description: Updates an application in your organization.
+      operationId: updateApplication
+      parameters:
+      - name: appId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '../../components/Application.yaml#/components/schemas/Application'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/Application.yaml#/components/schemas/Application'
+      security:
+      - api_token: []
+      x-okta-request-body-name: application
+    delete:
+      tags:
+      - Application
+      summary: Delete Application
+      description: Removes an inactive application.
+      operationId: deleteApplication
+      parameters:
+      - name: appId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content: {}
+      security:
+      - api_token: []
+  /api/v1/apps/{appId}/credentials/csrs:
+    get:
+      tags:
+      - Application
+      summary: List Certificate Signing Requests for Application
+      description: Enumerates Certificate Signing Requests for an application
+      operationId: listCsrsForApplication
+      parameters:
+      - name: appId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '../../components/Application.yaml#/components/schemas/Csr'
+      security:
+      - api_token: []
+    post:
+      tags:
+      - Application
+      summary: Generate Certificate Signing Request for Application
+      description: Generates a new key pair and returns the Certificate Signing Request
+        for it.
+      operationId: generateCsrForApplication
+      parameters:
+      - name: appId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '../../components/Application.yaml#/components/schemas/CsrMetadata'
+        required: true
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/Application.yaml#/components/schemas/Csr'
+      security:
+      - api_token: []
+      x-okta-request-body-name: metadata
+  /api/v1/apps/{appId}/credentials/csrs/{csrId}:
+    get:
+      tags:
+      - Application
+      summary: Get Certificate Signing Request
+      description: Fetches a certificate signing request for the app by `id`.
+      operationId: getCsrForApplication
+      parameters:
+      - name: appId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: csrId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/Application.yaml#/components/schemas/Csr'
+      security:
+      - api_token: []
+    delete:
+      tags:
+      - Application
+      summary: Revoke Certificate Signing Request
+      description: Revokes a certificate signing request and deletes the key pair from the application.
+      operationId: revokeCsrFromApplication
+      parameters:
+      - name: appId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: csrId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: No Content
+          content: {}
+      security:
+      - api_token: []
+  /api/v1/apps/{appId}/credentials/csrs/{csrId}/lifecycle/publish:
+    post:
+      tags:
+      - Application
+      summary: Publish Certificate Signing Request
+      description: Updates a certificate signing request for the app with a signed X.509 certificate and adds it into the application key credentials
+      operationId: publishCsrFromApplication
+      parameters:
+      - name: appId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: csrId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/octet-stream:
+            schema:
+              type: string
+              format: binary
+          application/x-x509-ca-cert:
+            schema:
+              oneOf:
+                - type: string
+                  format: binary
+                  x-okta-operationId: publishBinaryCerCert
+                - type: string
+                  format: base64
+                  x-okta-operationId: publishBase64CerCert
+          application/pkix-cert:
+            schema:
+              oneOf:
+                - type: string
+                  format: binary
+                  x-okta-operationId: publishBinaryDerCert
+                - type: string
+                  format: base64
+                  x-okta-operationId: publishBase64DerCert
+          application/x-pem-file:
+            schema:
+              type: string
+              format: binary
+              x-okta-operationId: publishBinaryPemCert
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/Application.yaml#/components/schemas/JsonWebKey'
+      security:
+      - api_token: []
+  /api/v1/apps/{appId}/credentials/keys:
+    get:
+      tags:
+      - Application
+      summary: List Key Credentials for Application
+      description: Enumerates key credentials for an application
+      operationId: listApplicationKeys
+      parameters:
+      - name: appId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '../../components/Application.yaml#/components/schemas/JsonWebKey'
+      security:
+      - api_token: []
+  /api/v1/apps/{appId}/credentials/keys/generate:
+    post:
+      tags:
+      - Application
+      description: Generates a new X.509 certificate for an application key credential
+      operationId: generateApplicationKey
+      parameters:
+      - name: appId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: validityYears
+        in: query
+        schema:
+          type: integer
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/Application.yaml#/components/schemas/JsonWebKey'
+      security:
+      - api_token: []
+  /api/v1/apps/{appId}/credentials/keys/{keyId}:
+    get:
+      tags:
+      - Application
+      summary: Get Key Credential for Application
+      description: Gets a specific application key credential by kid
+      operationId: getApplicationKey
+      parameters:
+      - name: appId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: keyId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/Application.yaml#/components/schemas/JsonWebKey'
+      security:
+      - api_token: []
+  /api/v1/apps/{appId}/credentials/keys/{keyId}/clone:
+    post:
+      tags:
+      - Application
+      summary: Clone Application Key Credential
+      description: Clones a X.509 certificate for an application key credential from
+        a source application to target application.
+      operationId: cloneApplicationKey
+      parameters:
+      - name: appId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: keyId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: targetAid
+        in: query
+        description: Unique key of the target Application
+        required: true
+        schema:
+          type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/Application.yaml#/components/schemas/JsonWebKey'
+      security:
+      - api_token: []
+  /api/v1/apps/{appId}/grants:
+    get:
+      tags:
+      - Application
+      description: Lists all scope consent grants for the application
+      operationId: listScopeConsentGrants
+      parameters:
+      - name: appId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: expand
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '../../components/Application.yaml#/components/schemas/OAuth2ScopeConsentGrant'
+      security:
+      - api_token: []
+    post:
+      tags:
+      - Application
+      description: Grants consent for the application to request an OAuth 2.0 Okta
+        scope
+      operationId: grantConsentToScope
+      parameters:
+      - name: appId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '../../components/Application.yaml#/components/schemas/OAuth2ScopeConsentGrant'
+        required: true
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/Application.yaml#/components/schemas/OAuth2ScopeConsentGrant'
+      security:
+      - api_token: []
+      x-okta-request-body-name: oAuth2ScopeConsentGrant
+  /api/v1/apps/{appId}/grants/{grantId}:
+    get:
+      tags:
+      - Application
+      description: Fetches a single scope consent grant for the application
+      operationId: getScopeConsentGrant
+      parameters:
+      - name: appId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: grantId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: expand
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/Application.yaml#/components/schemas/OAuth2ScopeConsentGrant'
+      security:
+      - api_token: []
+    delete:
+      tags:
+      - Application
+      description: Revokes permission for the application to request the given scope
+      operationId: revokeScopeConsentGrant
+      parameters:
+      - name: appId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: grantId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: No Content
+          content: {}
+      security:
+      - api_token: []
+  /api/v1/apps/{appId}/groups:
+    get:
+      tags:
+      - Application
+      summary: List Groups Assigned to Application
+      description: Enumerates group assignments for an application.
+      operationId: listApplicationGroupAssignments
+      parameters:
+      - name: appId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: q
+        in: query
+        schema:
+          type: string
+      - name: after
+        in: query
+        description: Specifies the pagination cursor for the next page of assignments
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Specifies the number of results for a page
+        schema:
+          type: integer
+          format: int32
+          default: -1
+      - name: expand
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '../../components/Application.yaml#/components/schemas/ApplicationGroupAssignment'
+      security:
+      - api_token: []
+  /api/v1/apps/{appId}/groups/{groupId}:
+    get:
+      tags:
+      - Application
+      summary: Get Assigned Group for Application
+      description: Fetches an application group assignment
+      operationId: getApplicationGroupAssignment
+      parameters:
+      - name: appId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: groupId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: expand
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/Application.yaml#/components/schemas/ApplicationGroupAssignment'
+      security:
+      - api_token: []
+    put:
+      tags:
+      - Application
+      summary: Assign Group to Application
+      description: Assigns a group to an application
+      operationId: createApplicationGroupAssignment
+      parameters:
+      - name: appId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: groupId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '../../components/Application.yaml#/components/schemas/ApplicationGroupAssignment'
+        required: false
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/Application.yaml#/components/schemas/ApplicationGroupAssignment'
+      security:
+      - api_token: []
+      x-okta-request-body-name: applicationGroupAssignment
+    delete:
+      tags:
+      - Application
+      summary: Remove Group from Application
+      description: Removes a group assignment from an application.
+      operationId: deleteApplicationGroupAssignment
+      parameters:
+      - name: appId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: groupId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: No Content
+          content: {}
+      security:
+      - api_token: []
+  /api/v1/apps/{appId}/lifecycle/activate:
+    post:
+      tags:
+      - Application
+      summary: Activate Application
+      description: Activates an inactive application.
+      operationId: activateApplication
+      parameters:
+      - name: appId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content: {}
+      security:
+      - api_token: []
+  /api/v1/apps/{appId}/lifecycle/deactivate:
+    post:
+      tags:
+      - Application
+      summary: Deactivate Application
+      description: Deactivates an active application.
+      operationId: deactivateApplication
+      parameters:
+      - name: appId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content: {}
+      security:
+      - api_token: []
+  /api/v1/apps/{appId}/tokens:
+    get:
+      tags:
+      - Application
+      description: Lists all tokens for the application
+      operationId: listOAuth2TokensForApplication
+      parameters:
+      - name: appId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: expand
+        in: query
+        schema:
+          type: string
+      - name: after
+        in: query
+        schema:
+          type: string
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 20
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '../../components/Application.yaml#/components/schemas/OAuth2Token'
+      security:
+      - api_token: []
+    delete:
+      tags:
+      - Application
+      description: Revokes all tokens for the specified application
+      operationId: revokeOAuth2TokensForApplication
+      parameters:
+      - name: appId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: No Content
+          content: {}
+      security:
+      - api_token: []
+  /api/v1/apps/{appId}/tokens/{tokenId}:
+    get:
+      tags:
+      - Application
+      description: Gets a token for the specified application
+      operationId: getOAuth2TokenForApplication
+      parameters:
+      - name: appId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: tokenId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: expand
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/Application.yaml#/components/schemas/OAuth2Token'
+      security:
+      - api_token: []
+    delete:
+      tags:
+      - Application
+      description: Revokes the specified token for the specified application
+      operationId: revokeOAuth2TokenForApplication
+      parameters:
+      - name: appId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: tokenId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: No Content
+          content: {}
+      security:
+      - api_token: []
+  /api/v1/apps/{appId}/users:
+    get:
+      tags:
+      - Application
+      summary: List Users Assigned to Application
+      description: Enumerates all assigned [application users](#application-user-model)
+        for an application.
+      operationId: listApplicationUsers
+      parameters:
+      - name: appId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: q
+        in: query
+        schema:
+          type: string
+      - name: query_scope
+        in: query
+        schema:
+          type: string
+      - name: after
+        in: query
+        description: specifies the pagination cursor for the next page of assignments
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: specifies the number of results for a page
+        schema:
+          type: integer
+          format: int32
+          default: -1
+      - name: filter
+        in: query
+        schema:
+          type: string
+      - name: expand
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '../../components/Application.yaml#/components/schemas/AppUser'
+      security:
+      - api_token: []
+    post:
+      tags:
+      - Application
+      summary: Assign User to Application for SSO & Provisioning
+      description: Assigns an user to an application with [credentials](#application-user-credentials-object)
+        and an app-specific [profile](#application-user-profile-object). Profile mappings
+        defined for the application are first applied before applying any profile
+        properties specified in the request.
+      operationId: assignUserToApplication
+      parameters:
+      - name: appId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '../../components/Application.yaml#/components/schemas/AppUser'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/Application.yaml#/components/schemas/AppUser'
+      security:
+      - api_token: []
+      x-okta-request-body-name: appUser
+  /api/v1/apps/{appId}/users/{userId}:
+    get:
+      tags:
+      - Application
+      summary: Get Assigned User for Application
+      description: Fetches a specific user assignment for application by `id`.
+      operationId: getApplicationUser
+      parameters:
+      - name: appId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: expand
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/Application.yaml#/components/schemas/AppUser'
+      security:
+      - api_token: []
+    post:
+      tags:
+      - Application
+      summary: Update Application Profile for Assigned User
+      description: Updates a user's profile for an application
+      operationId: updateApplicationUser
+      parameters:
+      - name: appId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '../../components/Application.yaml#/components/schemas/AppUser'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/Application.yaml#/components/schemas/AppUser'
+      security:
+      - api_token: []
+      x-okta-request-body-name: appUser
+    delete:
+      tags:
+      - Application
+      summary: Remove User from Application
+      description: Removes an assignment for a user from an application.
+      operationId: deleteApplicationUser
+      parameters:
+      - name: appId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: sendEmail
+        in: query
+        schema:
+          type: boolean
+          default: false
+        x-okta-added-version: 1.5.0
+      responses:
+        '204':
+          description: No Content
+          content: {}
+      security:
+      - api_token: []
+components:
+  securitySchemes:
+    api_token:
+      type: apiKey
+      description: SSWS {API Token}
+      name: Authorization
+      in: header

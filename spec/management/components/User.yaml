@@ -1,0 +1,664 @@
+openapi: 3.0.1
+info:
+  title: User Components
+  version: 1.0.0
+paths: {}
+components:
+  schemas:
+    AppLink:
+      type: object
+      properties:
+        appAssignmentId:
+          type: string
+          readOnly: true
+        appInstanceId:
+          type: string
+          readOnly: true
+        appName:
+          type: string
+          readOnly: true
+        credentialsSetup:
+          type: boolean
+          readOnly: true
+        hidden:
+          type: boolean
+          readOnly: true
+        id:
+          type: string
+          readOnly: true
+        label:
+          type: string
+          readOnly: true
+        linkUrl:
+          type: string
+          readOnly: true
+        logoUrl:
+          type: string
+          readOnly: true
+        sortOrder:
+          type: integer
+          readOnly: true
+      x-okta-tags:
+      - User
+    AuthenticationProvider:
+      type: object
+      properties:
+        name:
+          type: string
+        type:
+          $ref: '#/components/schemas/AuthenticationProviderType'
+      x-okta-tags:
+      - User
+    AuthenticationProviderType:
+      type: string
+      enum:
+      - ACTIVE_DIRECTORY
+      - FEDERATION
+      - LDAP
+      - OKTA
+      - SOCIAL
+      - IMPORT
+      x-okta-tags:
+      - User
+    ChangePasswordRequest:
+      type: object
+      properties:
+        newPassword:
+          $ref: '#/components/schemas/PasswordCredential'
+        oldPassword:
+          $ref: '#/components/schemas/PasswordCredential'
+      x-okta-tags:
+      - User
+    CreateUserRequest:
+      type: object
+      properties:
+        credentials:
+          $ref: '#/components/schemas/UserCredentials'
+        groupIds:
+          type: array
+          items:
+            type: string
+        profile:
+          $ref: '#/components/schemas/UserProfile'
+        type:
+          $ref: './UserType.yaml#/components/schemas/UserType'
+      x-okta-tags:
+      - User
+    ForgotPasswordResponse:
+      type: object
+      properties:
+        resetPasswordUrl:
+          type: string
+          readOnly: true
+      x-okta-tags:
+      - User
+    PasswordCredential:
+      type: object
+      properties:
+        hash:
+          $ref: '#/components/schemas/PasswordCredentialHash'
+        hook:
+          $ref: '#/components/schemas/PasswordCredentialHook'
+        value:
+          type: string
+          format: password
+      x-okta-tags:
+      - User
+    PasswordCredentialHash:
+      type: object
+      properties:
+        algorithm:
+          $ref: '#/components/schemas/PasswordCredentialHashAlgorithm'
+        salt:
+          type: string
+        saltOrder:
+          type: string
+        value:
+          type: string
+        workFactor:
+          type: integer
+      x-okta-tags:
+      - User
+    PasswordCredentialHashAlgorithm:
+      type: string
+      enum:
+      - BCRYPT
+      - SHA-512
+      - SHA-256
+      - SHA-1
+      - MD5
+      x-okta-tags:
+      - User
+    PasswordCredentialHook:
+      type: object
+      properties:
+        type:
+          type: string
+      x-okta-tags:
+      - User
+    RecoveryQuestionCredential:
+      type: object
+      properties:
+        answer:
+          type: string
+        question:
+          type: string
+      x-okta-tags:
+      - User
+    ResetPasswordToken:
+      type: object
+      properties:
+        resetPasswordUrl:
+          type: string
+          readOnly: true
+      x-okta-tags:
+      - User
+    ResponseLinks:
+      type: object
+      x-okta-tags:
+      - User
+    Role:
+      type: object
+      properties:
+        _embedded:
+          type: object
+          additionalProperties:
+            type: object
+            properties: {}
+          readOnly: true
+        _links:
+          type: object
+          additionalProperties:
+            type: object
+            properties: {}
+          readOnly: true
+        assignmentType:
+          $ref: './Role.yaml#/components/schemas/RoleAssignmentType'
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        description:
+          type: string
+        id:
+          type: string
+          readOnly: true
+        label:
+          type: string
+          readOnly: true
+        lastUpdated:
+          type: string
+          format: date-time
+          readOnly: true
+        status:
+          $ref: '#/components/schemas/RoleStatus'
+        type:
+          $ref: './Role.yaml#/components/schemas/RoleType'
+      x-okta-tags:
+      - User
+      x-okta-operations:
+      - alias: addAdminGroupTarget
+        arguments:
+        - dest: roleId
+          src: id
+        - dest: groupId
+          parentSrc: id
+        operationId: addGroupTargetToGroupAdministratorRoleForGroup
+      - alias: addAppInstanceTargetToAdminRole
+        arguments:
+        - dest: roleId
+          src: id
+        - dest: groupId
+          parentSrc: id
+        operationId: addApplicationInstanceTargetToAppAdminRoleGivenToGroup
+      - alias: addAppTargetToAdminRole
+        arguments:
+        - dest: roleId
+          src: id
+        - dest: groupId
+          parentSrc: id
+        operationId: addApplicationTargetToAdminRoleGivenToGroup
+      - alias: addAllAppsAsTargetToRole
+        arguments:
+        - dest: roleId
+          src: id
+        - dest: userId
+          parentSrc: id
+        operationId: addAllAppsAsTargetToRole
+      - alias: addAppTargetToAppAdminRoleForUser
+        arguments:
+        - dest: roleId
+          src: id
+        - dest: userId
+          parentSrc: id
+        operationId: addApplicationTargetToAppAdminRoleForUser
+      - alias: addAppTargetToAdminRoleForUser
+        arguments:
+        - dest: roleId
+          src: id
+        - dest: userId
+          parentSrc: id
+        operationId: addApplicationTargetToAdminRoleForUser
+    RoleStatus:
+      type: string
+      enum:
+      - ACTIVE
+      - INACTIVE
+      x-okta-tags:
+      - User
+    TempPassword:
+      type: object
+      properties:
+        tempPassword:
+          type: string
+          readOnly: true
+      x-okta-tags:
+      - User
+    User:
+      type: object
+      properties:
+        _embedded:
+          type: object
+          additionalProperties:
+            type: object
+            properties: {}
+          readOnly: true
+        _links:
+          type: object
+          additionalProperties:
+            type: object
+            properties: {}
+          readOnly: true
+        activated:
+          type: string
+          format: date-time
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        credentials:
+          $ref: '#/components/schemas/UserCredentials'
+        id:
+          type: string
+          readOnly: true
+        lastLogin:
+          type: string
+          format: date-time
+          readOnly: true
+        lastUpdated:
+          type: string
+          format: date-time
+          readOnly: true
+        passwordChanged:
+          type: string
+          format: date-time
+          readOnly: true
+        profile:
+          $ref: '#/components/schemas/UserProfile'
+        status:
+          $ref: '#/components/schemas/UserStatus'
+        statusChanged:
+          type: string
+          format: date-time
+          readOnly: true
+        transitioningToStatus:
+          $ref: '#/components/schemas/UserStatus'
+        type:
+          $ref: './UserType.yaml#/components/schemas/UserType'
+      x-okta-crud:
+      - alias: create
+        arguments:
+        - dest: user
+          self: true
+        operationId: createUser
+      - alias: read
+        arguments: []
+        operationId: getUser
+      - alias: update
+        arguments:
+        - dest: userId
+          src: id
+        - dest: user
+          self: true
+        operationId: updateUser
+      - alias: delete
+        arguments:
+        - dest: userId
+          src: id
+        - dest: user
+          self: true
+        operationId: deactivateOrDeleteUser
+      x-okta-operations:
+      - alias: listAppLinks
+        arguments:
+        - dest: userId
+          src: id
+        operationId: listAppLinks
+      - alias: changePassword
+        arguments:
+        - dest: userId
+          src: id
+        operationId: changePassword
+      - alias: changeRecoveryQuestion
+        arguments:
+        - dest: userId
+          src: id
+        operationId: changeRecoveryQuestion
+      - alias: forgotPasswordSetNewPassword
+        arguments:
+        - dest: userId
+          src: id
+        operationId: forgotPasswordSetNewPassword
+      - alias: forgotPasswordGenerateOneTimeToken
+        arguments:
+        - dest: userId
+          src: id
+        operationId: forgotPassword
+      - alias: assignRole
+        arguments:
+        - dest: userId
+          src: id
+        operationId: assignRoleToUser
+      - alias: removeRole
+        arguments:
+        - dest: userId
+          src: id
+        operationId: removeRoleFromUser
+      - alias: listGroupTargets
+        arguments:
+        - dest: userId
+          src: id
+        operationId: listGroupTargetsForRole
+      - alias: removeGroupTarget
+        arguments:
+        - dest: userId
+          src: id
+        operationId: removeGroupTargetFromRole
+      - alias: addGroupTarget
+        arguments:
+        - dest: userId
+          src: id
+        operationId: addGroupTargetToRole
+      - alias: listAssignedRoles
+        arguments:
+        - dest: userId
+          src: id
+        operationId: listAssignedRolesForUser
+      - alias: addAllAppsAsTarget
+        arguments:
+        - dest: userId
+          src: id
+        operationId: addAllAppsAsTargetToRole
+      - alias: listGroups
+        arguments:
+        - dest: userId
+          src: id
+        operationId: listUserGroups
+      - alias: listGrants
+        arguments:
+        - dest: userId
+          src: id
+        operationId: listUserGrants
+      - alias: revokeGrants
+        arguments:
+        - dest: userId
+          src: id
+        operationId: revokeUserGrants
+      - alias: revokeGrant
+        arguments:
+        - dest: userId
+          src: id
+        operationId: revokeUserGrant
+      - alias: revokeGrantsForUserAndClient
+        arguments:
+        - dest: userId
+          src: id
+        operationId: revokeGrantsForUserAndClient
+      - alias: listRefreshTokensForUserAndClient
+        arguments:
+        - dest: userId
+          src: id
+        operationId: listRefreshTokensForUserAndClient
+      - alias: revokeTokenForUserAndClient
+        arguments:
+        - dest: userId
+          src: id
+        operationId: revokeTokenForUserAndClient
+      - alias: getRefreshTokenForUserAndClient
+        arguments:
+        - dest: userId
+          src: id
+        operationId: getRefreshTokenForUserAndClient
+      - alias: revokeTokensForUserAndClient
+        arguments:
+        - dest: userId
+          src: id
+        operationId: revokeTokensForUserAndClient
+      - alias: listClients
+        arguments:
+        - dest: userId
+          src: id
+        operationId: listUserClients
+      - alias: activate
+        arguments:
+        - dest: userId
+          src: id
+        operationId: activateUser
+      - alias: reactivate
+        arguments:
+        - dest: userId
+          src: id
+        operationId: reactivateUser
+      - alias: deactivate
+        arguments:
+        - dest: userId
+          src: id
+        operationId: deactivateUser
+      - alias: suspend
+        arguments:
+        - dest: userId
+          src: id
+        operationId: suspendUser
+      - alias: unsuspend
+        arguments:
+        - dest: userId
+          src: id
+        operationId: unsuspendUser
+      - alias: resetPassword
+        arguments:
+        - dest: userId
+          src: id
+        operationId: resetPassword
+      - alias: expirePassword
+        arguments:
+        - dest: userId
+          src: id
+        operationId: expirePassword
+      - alias: expirePasswordAndGetTemporaryPassword
+        arguments:
+        - dest: userId
+          src: id
+        operationId: expirePasswordAndGetTemporaryPassword
+      - alias: unlock
+        arguments:
+        - dest: userId
+          src: id
+        operationId: unlockUser
+      - alias: resetFactors
+        arguments:
+        - dest: userId
+          src: id
+        operationId: resetFactors
+      - alias: deleteFactor
+        arguments:
+        - dest: userId
+          src: id
+        operationId: deleteFactor
+      - alias: addToGroup
+        arguments:
+        - dest: userId
+          src: id
+        description: Adds a user to a group with 'OKTA_GROUP' type
+        operationId: addUserToGroup
+      - alias: enrollFactor
+        arguments:
+        - dest: userId
+          src: id
+        operationId: enrollFactor
+      - alias: listSupportedFactors
+        arguments:
+        - dest: userId
+          src: id
+        operationId: listSupportedFactors
+      - alias: listFactors
+        arguments:
+        - dest: userId
+          src: id
+        operationId: listFactors
+      - alias: listSupportedSecurityQuestions
+        arguments:
+        - dest: userId
+          src: id
+        operationId: listSupportedSecurityQuestions
+      - alias: getFactor
+        arguments:
+        - dest: userId
+          src: id
+        operationId: getFactor
+      - alias: setLinkedObject
+        arguments:
+        - dest: associatedUserId
+          src: id
+        operationId: setLinkedObjectForUser
+      - alias: listIdentityProviders
+        arguments:
+        - dest: userId
+          src: id
+        operationId: listUserIdentityProviders
+      - alias: getLinkedObjects
+        arguments:
+        - dest: userId
+          src: id
+        operationId: getLinkedObjectsForUser
+      - alias: clearSessions
+        arguments:
+        - dest: userId
+          src: id
+        operationId: clearUserSessions
+      - alias: removeLinkedObject
+        arguments:
+        - dest: userId
+          src: id
+        operationId: removeLinkedObjectForUser
+      x-okta-tags:
+      - User
+    UserActivationToken:
+      type: object
+      properties:
+        activationToken:
+          type: string
+          readOnly: true
+        activationUrl:
+          type: string
+          readOnly: true
+      x-okta-tags:
+      - User
+    UserCredentials:
+      type: object
+      properties:
+        password:
+          $ref: '#/components/schemas/PasswordCredential'
+        provider:
+          $ref: '#/components/schemas/AuthenticationProvider'
+        recovery_question:
+          $ref: '#/components/schemas/RecoveryQuestionCredential'
+      x-okta-tags:
+      - User
+    UserNextLogin:
+      type: string
+      enum:
+      - changePassword
+      x-okta-tags:
+      - User
+    UserProfile:
+      type: object
+      properties:
+        city:
+          type: string
+        costCenter:
+          type: string
+        countryCode:
+          type: string
+        department:
+          type: string
+        displayName:
+          type: string
+        division:
+          type: string
+        email:
+          type: string
+        employeeNumber:
+          type: string
+        firstName:
+          type: string
+        honorificPrefix:
+          type: string
+        honorificSuffix:
+          type: string
+        lastName:
+          type: string
+        locale:
+          type: string
+        login:
+          type: string
+        manager:
+          type: string
+        managerId:
+          type: string
+        middleName:
+          type: string
+        mobilePhone:
+          type: string
+        nickName:
+          type: string
+        organization:
+          type: string
+        postalAddress:
+          type: string
+        preferredLanguage:
+          type: string
+        primaryPhone:
+          type: string
+        profileUrl:
+          type: string
+        secondEmail:
+          type: string
+        state:
+          type: string
+        streetAddress:
+          type: string
+        timezone:
+          type: string
+        title:
+          type: string
+        userType:
+          type: string
+        zipCode:
+          type: string
+      x-okta-extensible: true
+      x-okta-tags:
+      - User
+    UserStatus:
+      type: string
+      enum:
+      - ACTIVE
+      - DEPROVISIONED
+      - LOCKED_OUT
+      - PASSWORD_EXPIRED
+      - PROVISIONED
+      - RECOVERY
+      - STAGED
+      - SUSPENDED
+      x-okta-tags:
+      - User

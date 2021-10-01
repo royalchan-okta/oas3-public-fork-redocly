@@ -1,0 +1,120 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  /* brandfolder */
+  --okta-blue: #00297a;
+
+  --white: #ffffff;
+  --black: #000000;
+
+  --deep-gray: #41414b;
+  --dark-gray: #6e6e78;
+  --mid-gray: #aaaab4;
+  --light-gray: #d7d7dc;
+
+  --dark-lilac: #3c2b57;
+  --lilac: #8d6e97;
+  --light-lilac: #cfb1c1;
+
+  --dark-turquoise: #095661;
+  --turquoise: #2d8c9e;
+  --light-turquoise: #abd5d6;
+
+  --dark-yellow: #cc8a00;
+  --yellow: #ffc61c;
+  --light-yellow: #fad28c;
+
+  --dark-green: #1e5046;
+  --green: #00b478;
+  --light-green: #a0dcc3;
+
+  --dark-orange: #873800;
+  --orange: #e97107;
+  --light-orange: #f0bf87;
+
+  --dark-red: #892100;
+  --red: #ec3629;
+  --light-red: #faafa3;
+
+  /* odyssey */
+  --gray-900: #1d1d21;
+  --gray-600: #6e6e78;
+  --gray-500: #8c8c96;
+  --gray-200: #d7d7dc;
+  --gray-100: #ebebed;
+  --gray-000: #f5f5f6;
+
+  --white: #ffffff;
+
+  --blue-900: #00297a;
+  --blue-500: #1662dd;
+  --blue-400: #788ee2;
+  --blue-300: #a7b5ec;
+  --blue-000: #f2f5ff;
+
+  --green-900: #00503c;
+  --green-600: #008055;
+  --green-500: #00b478;
+  --green-300: #8ed2b1;
+  --green-000: #e5faf3;
+
+  --red-900: #640019;
+  --red-500: #da372c;
+  --red-300: #f88c90;
+  --red-000: #ffdfe2;
+
+  --yellow-900: #663800;
+  --yellow-500: #ffc61c;
+  --yellow-300: #f9dc77;
+  --yellow-000: #faf5dc;
+
+  --orange-500: #e97107;
+
+  --purple-500: #8d6e97;
+
+  --turquoise-500: #2d8c9e;
+  --turquoise-400: #65adb7;
+}
+
+/* section headers */
+h1, h2 {
+  color: var(--okta-blue)!important;
+}
+
+/* logo */
+.menu-content > div:first-child {
+  padding: 1rem;
+}
+
+span[type='get'].operation-type.get,
+span[type='get'].http-verb.get {
+  background-color: var(--green);
+}
+span[type='post'].operation-type.post,
+span[type='post'].http-verb.post {
+  background-color: var(--turquoise);
+}
+span[type='put'].operation-type.put,
+span[type='put'].http-verb.put {
+  background-color: var(--lilac);
+}
+span[type='patch'].operation-type.patch,
+span[type='patch'].http-verb.patch {
+  background-color: var(--orange);
+}
+span[type='delete'].operation-type.delete,
+span[type='delete'].http-verb.delete {
+  background-color: var(--red);
+}
+span[type='options'].operation-type.options,
+span[type='options'].http-verb.options {
+  background-color: var(--dark-yellow);
+}
+span[type='head'].operation-type.head,
+span[type='head'].http-verb.head {
+  background-color: var(--lilac);
+}

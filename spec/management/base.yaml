@@ -1,0 +1,37 @@
+openapi: 3.0.1
+info:
+  title: Okta API
+  description: Allows customers to easily access the Okta API
+  termsOfService: https://developer.okta.com/terms/
+  contact:
+    name: Okta Developer Team
+    url: https://developer.okta.com/
+    email: devex-public@okta.com
+  license:
+    name: Apache-2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+  version: 2.7.0
+  x-logo:
+    url: logo.svg
+    backgroundColor: transparent
+    altText: Okta Logo
+externalDocs:
+  description: Find more info here
+  url: https://developer.okta.com/docs/api/getting_started/design_principles.html
+servers:
+- url: https://your-subdomain.okta.com
+components:
+  securitySchemes:
+    api_token:
+      description: "Pass the API token as the Authorization header value prefixed with SSWS: 'Authorizaion: SSWS {API Token}'"
+      name: Authorization
+      type: apiKey
+      in: header
+    oauth2:
+        type: oauth2
+        description: "Pass the access_token as the value of the Authorization header: 'Authorization: {access_token}'"
+        flows: 
+          authorizationCode:
+            authorizationUrl: /oauth2/v1/authorize
+            tokenUrl: /oauth2/v1/token
+            scopes: []

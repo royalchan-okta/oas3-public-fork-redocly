@@ -1,0 +1,186 @@
+openapi: 3.0.1
+info:
+  title: Zones API
+  description: Zones API
+  version: 1.0.0
+paths:
+  /api/v1/zones:
+    get:
+      tags:
+      - NetworkZone
+      summary: List Network Zones
+      description: Enumerates network zones added to your organization with pagination.
+        A subset of zones can be returned that match a supported filter expression
+        or query.
+      operationId: listNetworkZones
+      parameters:
+      - name: after
+        in: query
+        description: Specifies the pagination cursor for the next page of network
+          zones
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Specifies the number of results for a page
+        schema:
+          type: integer
+          format: int32
+          default: -1
+      - name: filter
+        in: query
+        description: Filters zones by usage or id expression
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '../../components/NetworkZone.yaml#/components/schemas/NetworkZone'
+      security:
+      - api_token: []
+    post:
+      tags:
+      - NetworkZone
+      summary: Add Network Zone
+      description: Adds a new network zone to your Okta organization.
+      operationId: createNetworkZone
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '../../components/NetworkZone.yaml#/components/schemas/NetworkZone'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/NetworkZone.yaml#/components/schemas/NetworkZone'
+      security:
+      - api_token: []
+      x-okta-request-body-name: zone
+  /api/v1/zones/{zoneId}:
+    get:
+      tags:
+      - NetworkZone
+      summary: Get Network Zone
+      description: Fetches a network zone from your Okta organization by `id`.
+      operationId: getNetworkZone
+      parameters:
+      - name: zoneId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/NetworkZone.yaml#/components/schemas/NetworkZone'
+      security:
+      - api_token: []
+    put:
+      tags:
+      - NetworkZone
+      summary: Update Network Zone
+      description: Updates a network zone in your organization.
+      operationId: updateNetworkZone
+      parameters:
+      - name: zoneId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '../../components/NetworkZone.yaml#/components/schemas/NetworkZone'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/NetworkZone.yaml#/components/schemas/NetworkZone'
+      security:
+      - api_token: []
+      x-okta-request-body-name: zone
+    delete:
+      tags:
+      - NetworkZone
+      summary: Delete Network Zone
+      description: Removes network zone.
+      operationId: deleteNetworkZone
+      parameters:
+      - name: zoneId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content: {}
+      security:
+      - api_token: []
+  /api/v1/zones/{zoneId}/lifecycle/deactivate:
+    post:
+      tags:
+      - NetworkZone
+      summary: Deactivate Network Zone
+      description: Deactivates a network zone.
+      operationId: deactivateNetworkZone
+      parameters:
+      - name: zoneId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/NetworkZone.yaml#/components/schemas/NetworkZone'
+      security:
+      - api_token: []
+  /api/v1/zones/{zoneId}/lifecycle/activate:
+    post:
+      tags:
+      - NetworkZone
+      summary: Activate Network Zone
+      description: Activate Network Zone
+      operationId: activateNetworkZone
+      parameters:
+      - name: zoneId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/NetworkZone.yaml#/components/schemas/NetworkZone'
+      security:
+      - api_token: []
+components:
+  securitySchemes:
+    api_token:
+      type: apiKey
+      description: SSWS {API Token}
+      name: Authorization
+      in: header

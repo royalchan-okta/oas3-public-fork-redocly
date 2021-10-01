@@ -1,0 +1,117 @@
+openapi: 3.0.1
+info:
+  title: Authorization Server Policy Components
+  version: 1.0.0
+paths: {}
+components:
+  schemas:
+    AuthorizationServerPolicyRule:
+      type: object
+      properties:
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        id:
+          type: string
+          readOnly: true
+        name:
+          type: string
+        lastUpdated:
+          type: string
+          format: date-time
+          readOnly: true
+        priority:
+          type: integer
+        status:
+          type: string
+          default: ACTIVE
+          enum:
+          - ACTIVE
+          - INACTIVE
+        system:
+          type: boolean
+          default: false
+        type:
+          type: string
+          enum:
+          - RESOURCE_ACCESS
+        conditions:
+          $ref: '#/components/schemas/AuthorizationServerPolicyRuleConditions'
+        actions:
+          $ref: '#/components/schemas/AuthorizationServerPolicyRuleActions'
+      x-okta-crud:
+      - alias: update
+        arguments:
+        - dest: ruleId
+          src: id
+        - dest: policyRule
+          self: true
+        - dest: policyId
+          parentSrc: id
+        operationId: updateAuthorizationServerPolicyRule
+      - alias: delete
+        arguments:
+        - dest: ruleId
+          src: id
+        - dest: policyId
+          parentSrc: policyId
+        operationId: deleteAuthorizationServerPolicyRule
+      x-okta-operations:
+      - alias: activate
+        arguments:
+        - dest: ruleId
+          src: id
+        - dest: policyId
+          parentSrc: policyId
+        operationId: activateAuthorizationServerPolicyRule
+      - alias: deactivate
+        arguments:
+        - dest: ruleId
+          src: id
+        - dest: policyId
+          parentSrc: policyId
+        operationId: deactivateAuthorizationServerPolicyRule
+      x-okta-tags:
+      - AuthorizationServerPolicy
+    AuthorizationServerPolicyRuleActions:
+      type: object
+      properties:
+        token:
+          $ref: '#/components/schemas/TokenAuthorizationServerPolicyRuleAction'
+      x-okta-tags:
+      - AuthorizationServerPolicy
+    TokenAuthorizationServerPolicyRuleAction:
+      type: object
+      properties:
+        accessTokenLifetimeMinutes:
+          type: integer
+        refreshTokenLifetimeMinutes:
+          type: integer
+        refreshTokenWindowMinutes:
+          type: integer
+        inlineHook:
+          $ref: '#/components/schemas/TokenAuthorizationServerPolicyRuleActionInlineHook'
+      x-okta-tags:
+      - AuthorizationServerPolicy
+    TokenAuthorizationServerPolicyRuleActionInlineHook:
+      properties:
+        id:
+          type: string
+          readOnly: false
+      type: object
+      x-okta-tags:
+        - AuthorizationServerPolicy
+    AuthorizationServerPolicyRuleConditions:
+      type: object
+      properties:
+        people:
+          $ref: './Policy.yaml#/components/schemas/PolicyPeopleCondition'
+        clients:
+          $ref: './Policy.yaml#/components/schemas/ClientPolicyCondition'
+        grantTypes:
+          $ref: './Policy.yaml#/components/schemas/GrantTypePolicyRuleCondition'
+        scopes:
+          $ref: './Application.yaml#/components/schemas/OAuth2ScopesMediationPolicyRuleCondition'
+      x-okta-tags:
+      - AuthorizationServerPolicy

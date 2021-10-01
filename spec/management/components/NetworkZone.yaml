@@ -1,0 +1,132 @@
+openapi: 3.0.1
+info:
+  title: Network Zone Components
+  version: 1.0.0
+paths: {}
+components:
+  schemas:
+    NetworkZone:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/NetworkZoneType'
+        id:
+          type: string
+          readOnly: true
+        name:
+          type: string
+        system:
+          type: boolean
+        usage:
+          $ref: '#/components/schemas/NetworkZoneUsage'
+        status:
+          $ref: '#/components/schemas/NetworkZoneStatus'
+        proxyType:
+          type: string
+        locations:
+          type: array
+          items:
+            $ref: '#/components/schemas/NetworkZoneLocation'
+        gateways:
+          type: array
+          items:
+            $ref: '#/components/schemas/NetworkZoneAddress'
+        proxies:
+          type: array
+          items:
+            $ref: '#/components/schemas/NetworkZoneAddress'
+        asns:
+          type: array
+          items:
+            type: string
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        lastUpdated:
+          type: string
+          format: date-time
+          readOnly: true
+        _links:
+          type: object
+          additionalProperties:
+            type: object
+            properties: {}
+          readOnly: true
+      x-okta-crud:
+      - alias: read
+        arguments:
+        - dest: zoneId
+          src: id
+        operationId: getNetworkZone
+      - alias: update
+        arguments:
+        - dest: zoneId
+          src: id
+        - dest: zone
+          self: true
+        operationId: updateNetworkZone
+      - alias: delete
+        arguments:
+        - dest: zoneId
+          src: id
+        operationId: deleteNetworkZone
+      x-okta-operations:
+      - alias: activate
+        arguments:
+        - dest: zoneId
+          src: id
+        operationId: activateNetworkZone
+      - alias: deactivate
+        arguments:
+        - dest: zoneId
+          src: id
+        operationId: deactivateNetworkZone
+      x-okta-tags:
+      - NetworkZone
+    NetworkZoneType:
+      type: string
+      enum:
+      - IP
+      - DYNAMIC
+      x-okta-tags:
+      - NetworkZone
+    NetworkZoneUsage:
+      type: string
+      enum:
+      - POLICY
+      - BLOCKLIST
+      x-okta-tags:
+      - NetworkZone
+    NetworkZoneStatus:
+      type: string
+      enum:
+      - ACTIVE
+      - INACTIVE
+      x-okta-tags:
+      - NetworkZone
+    NetworkZoneLocation:
+      type: object
+      properties:
+        country:
+          type: string
+        region:
+          type: string
+      x-okta-tags:
+      - NetworkZone
+    NetworkZoneAddress:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/NetworkZoneAddressType'
+        value:
+          type: string
+      x-okta-tags:
+      - NetworkZone
+    NetworkZoneAddressType:
+      type: string
+      enum:
+      - CIDR
+      - RANGE
+      x-okta-tags:
+      - NetworkZone

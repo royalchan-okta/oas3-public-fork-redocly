@@ -1,0 +1,101 @@
+openapi: 3.0.1
+info:
+  title: Mappings API
+  description: Mappings API
+  version: 1.0.0
+paths:
+  /api/v1/mappings:
+    get:
+      tags:
+      - ProfileMapping
+      description: Enumerates Profile Mappings in your organization with pagination.
+      operationId: listProfileMappings
+      parameters:
+      - name: after
+        in: query
+        schema:
+          type: string
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: -1
+      - name: sourceId
+        in: query
+        schema:
+          type: string
+      - name: targetId
+        in: query
+        schema:
+          type: string
+          default: ''
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '../../components/ProfileMapping.yaml#/components/schemas/ProfileMapping'
+      security:
+      - api_token: []
+  /api/v1/mappings/{mappingId}:
+    get:
+      tags:
+      - ProfileMapping
+      summary: Get Profile Mapping
+      description: Fetches a single Profile Mapping referenced by its ID.
+      operationId: getProfileMapping
+      parameters:
+      - name: mappingId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/ProfileMapping.yaml#/components/schemas/ProfileMapping'
+      security:
+      - api_token: []
+    post:
+      tags:
+      - ProfileMapping
+      summary: Update Profile Mapping
+      description: Updates an existing Profile Mapping by adding, updating, or removing
+        one or many Property Mappings.
+      operationId: updateProfileMapping
+      parameters:
+      - name: mappingId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '../../components/ProfileMapping.yaml#/components/schemas/ProfileMapping'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/ProfileMapping.yaml#/components/schemas/ProfileMapping'
+      security:
+      - api_token: []
+      x-okta-request-body-name: profileMapping
+components:
+  securitySchemes:
+    api_token:
+      type: apiKey
+      description: SSWS {API Token}
+      name: Authorization
+      in: header

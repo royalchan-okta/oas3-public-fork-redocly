@@ -1,0 +1,354 @@
+openapi: 3.0.1
+info:
+  title: Policies API
+  description: Policies API
+  version: 1.0.0
+paths:
+  /api/v1/policies:
+    get:
+      tags:
+      - Policy
+      description: Gets all policies with the specified type.
+      operationId: listPolicies
+      parameters:
+      - name: type
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: status
+        in: query
+        schema:
+          type: string
+      - name: expand
+        in: query
+        schema:
+          type: string
+          default: ''
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '../../components/Policy.yaml#/components/schemas/Policy'
+      security:
+      - api_token: []
+    post:
+      tags:
+      - Policy
+      description: Creates a policy.
+      operationId: createPolicy
+      parameters:
+      - name: activate
+        in: query
+        schema:
+          type: boolean
+          default: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '../../components/Policy.yaml#/components/schemas/Policy'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/Policy.yaml#/components/schemas/Policy'
+      security:
+      - api_token: []
+      x-okta-request-body-name: policy
+  /api/v1/policies/{policyId}:
+    get:
+      tags:
+      - Policy
+      description: Gets a policy.
+      operationId: getPolicy
+      parameters:
+      - name: policyId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: expand
+        in: query
+        schema:
+          type: string
+          default: ''
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/Policy.yaml#/components/schemas/Policy'
+      security:
+      - api_token: []
+    put:
+      tags:
+      - Policy
+      description: Updates a policy.
+      operationId: updatePolicy
+      parameters:
+      - name: policyId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '../../components/Policy.yaml#/components/schemas/Policy'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/Policy.yaml#/components/schemas/Policy'
+      security:
+      - api_token: []
+      x-okta-request-body-name: policy
+    delete:
+      tags:
+      - Policy
+      description: Removes a policy.
+      operationId: deletePolicy
+      parameters:
+      - name: policyId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content: {}
+      security:
+      - api_token: []
+  /api/v1/policies/{policyId}/lifecycle/activate:
+    post:
+      tags:
+      - Policy
+      description: Activates a policy.
+      operationId: activatePolicy
+      parameters:
+      - name: policyId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: No Content
+          content: {}
+      security:
+      - api_token: []
+  /api/v1/policies/{policyId}/lifecycle/deactivate:
+    post:
+      tags:
+      - Policy
+      description: Deactivates a policy.
+      operationId: deactivatePolicy
+      parameters:
+      - name: policyId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: No Content
+          content: {}
+      security:
+      - api_token: []
+  /api/v1/policies/{policyId}/rules:
+    get:
+      tags:
+      - Policy
+      description: Enumerates all policy rules.
+      operationId: listPolicyRules
+      parameters:
+      - name: policyId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '../../components/Policy.yaml#/components/schemas/PolicyRule'
+      security:
+      - api_token: []
+    post:
+      tags:
+      - Policy
+      description: Creates a policy rule.
+      operationId: createPolicyRule
+      parameters:
+      - name: policyId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '../../components/Policy.yaml#/components/schemas/PolicyRule'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/Policy.yaml#/components/schemas/PolicyRule'
+      security:
+      - api_token: []
+      x-okta-request-body-name: policyRule
+  /api/v1/policies/{policyId}/rules/{ruleId}:
+    get:
+      tags:
+      - Policy
+      description: Gets a policy rule.
+      operationId: getPolicyRule
+      parameters:
+      - name: policyId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: ruleId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/Policy.yaml#/components/schemas/PolicyRule'
+      security:
+      - api_token: []
+    put:
+      tags:
+      - Policy
+      description: Updates a policy rule.
+      operationId: updatePolicyRule
+      parameters:
+      - name: policyId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: ruleId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '../../components/Policy.yaml#/components/schemas/PolicyRule'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/Policy.yaml#/components/schemas/PolicyRule'
+      security:
+      - api_token: []
+      x-okta-request-body-name: policyRule
+    delete:
+      tags:
+      - Policy
+      description: Removes a policy rule.
+      operationId: deletePolicyRule
+      parameters:
+      - name: policyId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: ruleId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: No Content
+          content: {}
+      security:
+      - api_token: []
+  /api/v1/policies/{policyId}/rules/{ruleId}/lifecycle/activate:
+    post:
+      tags:
+      - Policy
+      description: Activates a policy rule.
+      operationId: activatePolicyRule
+      parameters:
+      - name: policyId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: ruleId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content: {}
+      security:
+      - api_token: []
+  /api/v1/policies/{policyId}/rules/{ruleId}/lifecycle/deactivate:
+    post:
+      tags:
+      - Policy
+      description: Deactivates a policy rule.
+      operationId: deactivatePolicyRule
+      parameters:
+      - name: policyId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: ruleId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: No Content
+          content: {}
+      security:
+      - api_token: []
+components:
+  securitySchemes:
+    api_token:
+      type: apiKey
+      description: SSWS {API Token}
+      name: Authorization
+      in: header

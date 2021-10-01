@@ -1,0 +1,77 @@
+openapi: 3.0.1
+info:
+  title: Profile Mapping Components
+  version: 1.0.0
+paths: {}
+components:
+  schemas:
+    ProfileMapping:
+      type: object
+      properties:
+        _links:
+          type: object
+          additionalProperties:
+            type: object
+            properties: {}
+          readOnly: true
+        id:
+          type: string
+          readOnly: true
+        properties:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/ProfileMappingProperty'
+          readOnly: true
+        source:
+          $ref: '#/components/schemas/ProfileMappingSource'
+        target:
+          $ref: '#/components/schemas/ProfileMappingSource'
+      x-okta-tags:
+      - ProfileMapping
+      x-okta-crud:
+      - alias: read
+        arguments:
+        - dest: mappingId
+          src: id
+        operationId: getProfileMapping
+      - alias: update
+        arguments:
+        - dest: mappingId
+          src: id
+        operationId: updateProfileMapping
+    ProfileMappingProperty:
+      type: object
+      properties:
+        expression:
+          type: string
+        pushStatus:
+          $ref: '#/components/schemas/ProfileMappingPropertyPushStatus'
+      x-okta-tags:
+      - ProfileMapping
+    ProfileMappingPropertyPushStatus:
+      type: string
+      enum:
+      - PUSH
+      - DONT_PUSH
+      x-okta-tags:
+      - ProfileMapping
+    ProfileMappingSource:
+      type: object
+      properties:
+        _links:
+          type: object
+          additionalProperties:
+            type: object
+            properties: {}
+          readOnly: true
+        id:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        type:
+          type: string
+          readOnly: true
+      x-okta-tags:
+      - ProfileMapping

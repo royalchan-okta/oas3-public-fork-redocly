@@ -1,0 +1,127 @@
+openapi: 3.0.1
+info:
+  title: Features API
+  description: Features API
+  version: 1.0.0
+paths:
+  /api/v1/features:
+    get:
+      tags:
+      - Feature
+      description: Success
+      operationId: listFeatures
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '../../components/Feature.yaml#/components/schemas/Feature'
+      security:
+      - api_token: []
+  /api/v1/features/{featureId}:
+    get:
+      tags:
+      - Feature
+      description: Success
+      operationId: getFeature
+      parameters:
+      - name: featureId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/Feature.yaml#/components/schemas/Feature'
+      security:
+      - api_token: []
+  /api/v1/features/{featureId}/dependencies:
+    get:
+      tags:
+      - Feature
+      description: Success
+      operationId: listFeatureDependencies
+      parameters:
+      - name: featureId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '../../components/Feature.yaml#/components/schemas/Feature'
+      security:
+      - api_token: []
+  /api/v1/features/{featureId}/dependents:
+    get:
+      tags:
+      - Feature
+      description: Success
+      operationId: listFeatureDependents
+      parameters:
+      - name: featureId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '../../components/Feature.yaml#/components/schemas/Feature'
+      security:
+      - api_token: []
+  /api/v1/features/{featureId}/{lifecycle}:
+    post:
+      tags:
+      - Feature
+      description: Success
+      operationId: updateFeatureLifecycle
+      parameters:
+      - name: featureId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: lifecycle
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: mode
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/Feature.yaml#/components/schemas/Feature'
+      security:
+      - api_token: []
+components:
+  securitySchemes:
+    api_token:
+      type: apiKey
+      description: SSWS {API Token}
+      name: Authorization
+      in: header

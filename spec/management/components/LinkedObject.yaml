@@ -1,0 +1,55 @@
+openapi: 3.0.1
+info:
+  title: Linked Object Components
+  version: 1.0.0
+paths: {}
+components:
+  schemas:
+    LinkedObject:
+      type: object
+      properties:
+        _links:
+          type: object
+          additionalProperties:
+            type: object
+            properties: {}
+          readOnly: true
+        associated:
+          $ref: '#/components/schemas/LinkedObjectDetails'
+        primary:
+          $ref: '#/components/schemas/LinkedObjectDetails'
+      x-okta-crud:
+      - alias: create
+        arguments:
+        - dest: linkedObjectDefinition
+          self: true
+        operationId: addLinkedObjectDefinition
+      - alias: read
+        arguments: []
+        operationId: getLinkedObjectDefinition
+      - alias: delete
+        arguments:
+        - dest: linkedObjectName
+          self: true
+        operationId: deleteLinkedObjectDefinition
+      x-okta-tags:
+      - LinkedObject
+    LinkedObjectDetails:
+      type: object
+      properties:
+        description:
+          type: string
+        name:
+          type: string
+        title:
+          type: string
+        type:
+          $ref: '#/components/schemas/LinkedObjectDetailsType'
+      x-okta-tags:
+      - LinkedObject
+    LinkedObjectDetailsType:
+      type: string
+      enum:
+      - USER
+      x-okta-tags:
+      - LinkedObject

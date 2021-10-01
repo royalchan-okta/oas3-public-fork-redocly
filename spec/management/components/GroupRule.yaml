@@ -1,0 +1,134 @@
+openapi: 3.0.1
+info:
+  title: Group Rule Components
+  version: 1.0.0
+paths: {}
+components:
+  schemas:
+    GroupRule:
+      type: object
+      properties:
+        actions:
+          $ref: '#/components/schemas/GroupRuleAction'
+        conditions:
+          $ref: '#/components/schemas/GroupRuleConditions'
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        id:
+          type: string
+          readOnly: true
+        lastUpdated:
+          type: string
+          format: date-time
+          readOnly: true
+        name:
+          type: string
+        status:
+          $ref: '#/components/schemas/GroupRuleStatus'
+        type:
+          type: string
+      x-okta-crud:
+      - alias: update
+        arguments:
+        - dest: ruleId
+          src: id
+        - dest: groupRule
+          self: true
+        operationId: updateGroupRule
+      - alias: delete
+        arguments:
+        - dest: ruleId
+          src: id
+        operationId: deleteGroupRule
+      x-okta-operations:
+      - alias: activate
+        arguments:
+        - dest: ruleId
+          src: id
+        operationId: activateGroupRule
+      - alias: deactivate
+        arguments:
+        - dest: ruleId
+          src: id
+        operationId: deactivateGroupRule
+      x-okta-tags:
+      - GroupRule
+    GroupRuleAction:
+      type: object
+      properties:
+        assignUserToGroups:
+          $ref: '#/components/schemas/GroupRuleGroupAssignment'
+      x-okta-tags:
+      - GroupRule
+    GroupRuleConditions:
+      type: object
+      properties:
+        expression:
+          $ref: '#/components/schemas/GroupRuleExpression'
+        people:
+          $ref: '#/components/schemas/GroupRulePeopleCondition'
+      x-okta-tags:
+      - GroupRule
+    GroupRuleExpression:
+      type: object
+      properties:
+        type:
+          type: string
+        value:
+          type: string
+      x-okta-tags:
+      - GroupRule
+    GroupRuleGroupAssignment:
+      type: object
+      properties:
+        groupIds:
+          type: array
+          items:
+            type: string
+      x-okta-tags:
+      - GroupRule
+    GroupRuleGroupCondition:
+      type: object
+      properties:
+        exclude:
+          type: array
+          items:
+            type: string
+        include:
+          type: array
+          items:
+            type: string
+      x-okta-tags:
+      - GroupRule
+    GroupRulePeopleCondition:
+      type: object
+      properties:
+        groups:
+          $ref: '#/components/schemas/GroupRuleGroupCondition'
+        users:
+          $ref: '#/components/schemas/GroupRuleUserCondition'
+      x-okta-tags:
+      - GroupRule
+    GroupRuleStatus:
+      type: string
+      enum:
+      - ACTIVE
+      - INACTIVE
+      - INVALID
+      x-okta-tags:
+      - GroupRule
+    GroupRuleUserCondition:
+      type: object
+      properties:
+        exclude:
+          type: array
+          items:
+            type: string
+        include:
+          type: array
+          items:
+            type: string
+      x-okta-tags:
+      - GroupRule

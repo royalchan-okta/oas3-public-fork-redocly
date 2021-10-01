@@ -1,0 +1,41 @@
+openapi: 3.0.1
+info:
+  title: Threat Insight Components
+  version: 1.0.0
+paths: {}
+components:
+  schemas:
+    ThreatInsightConfiguration:
+      type: object
+      properties:
+        action:
+          type: string
+        excludeZones:
+          type: array
+          items:
+            type: string
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        lastUpdated:
+          type: string
+          format: date-time
+          readOnly: true
+        _links:
+          type: object
+          additionalProperties:
+            type: object
+            properties: {}
+          readOnly: true
+      x-okta-crud:
+      - alias: read
+        arguments: []
+        operationId: getCurrentConfiguration
+      - alias: update
+        arguments:
+        - dest: threatInsightConfiguration
+          self: true
+        operationId: updateConfiguration
+      x-okta-tags:
+      - ThreatInsight

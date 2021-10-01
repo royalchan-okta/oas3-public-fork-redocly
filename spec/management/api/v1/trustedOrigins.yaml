@@ -1,0 +1,177 @@
+openapi: 3.0.1
+info:
+  title: Trustedorigins API
+  description: Trustedorigins API
+  version: 1.0.0
+paths:
+  /api/v1/trustedOrigins:
+    get:
+      tags:
+      - TrustedOrigin
+      description: Success
+      operationId: listOrigins
+      parameters:
+      - name: q
+        in: query
+        schema:
+          type: string
+      - name: filter
+        in: query
+        schema:
+          type: string
+      - name: after
+        in: query
+        schema:
+          type: string
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: -1
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '../../components/TrustedOrigin.yaml#/components/schemas/TrustedOrigin'
+      security:
+      - api_token: []
+    post:
+      tags:
+      - TrustedOrigin
+      description: Success
+      operationId: createOrigin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '../../components/TrustedOrigin.yaml#/components/schemas/TrustedOrigin'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/TrustedOrigin.yaml#/components/schemas/TrustedOrigin'
+      security:
+      - api_token: []
+      x-okta-request-body-name: trustedOrigin
+  /api/v1/trustedOrigins/{trustedOriginId}:
+    get:
+      tags:
+      - TrustedOrigin
+      description: Success
+      operationId: getOrigin
+      parameters:
+      - name: trustedOriginId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/TrustedOrigin.yaml#/components/schemas/TrustedOrigin'
+      security:
+      - api_token: []
+    put:
+      tags:
+      - TrustedOrigin
+      description: Success
+      operationId: updateOrigin
+      parameters:
+      - name: trustedOriginId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '../../components/TrustedOrigin.yaml#/components/schemas/TrustedOrigin'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/TrustedOrigin.yaml#/components/schemas/TrustedOrigin'
+      security:
+      - api_token: []
+      x-okta-request-body-name: trustedOrigin
+    delete:
+      tags:
+      - TrustedOrigin
+      description: Success
+      operationId: deleteOrigin
+      parameters:
+      - name: trustedOriginId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content: {}
+      security:
+      - api_token: []
+  /api/v1/trustedOrigins/{trustedOriginId}/lifecycle/activate:
+    post:
+      tags:
+      - TrustedOrigin
+      description: Success
+      operationId: activateOrigin
+      parameters:
+      - name: trustedOriginId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/TrustedOrigin.yaml#/components/schemas/TrustedOrigin'
+      security:
+      - api_token: []
+  /api/v1/trustedOrigins/{trustedOriginId}/lifecycle/deactivate:
+    post:
+      tags:
+      - TrustedOrigin
+      description: Success
+      operationId: deactivateOrigin
+      parameters:
+      - name: trustedOriginId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/TrustedOrigin.yaml#/components/schemas/TrustedOrigin'
+      security:
+      - api_token: []
+components:
+  securitySchemes:
+    api_token:
+      type: apiKey
+      description: SSWS {API Token}
+      name: Authorization
+      in: header

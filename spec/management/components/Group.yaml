@@ -1,0 +1,99 @@
+openapi: 3.0.1
+info:
+  title: Group Components
+  version: 1.0.0
+paths: {}
+components:
+  schemas:
+    Group:
+      type: object
+      properties:
+        _embedded:
+          type: object
+          additionalProperties:
+            type: object
+            properties: {}
+          readOnly: true
+        _links:
+          type: object
+          additionalProperties:
+            type: object
+            properties: {}
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        id:
+          type: string
+          readOnly: true
+        lastMembershipUpdated:
+          type: string
+          format: date-time
+          readOnly: true
+        lastUpdated:
+          type: string
+          format: date-time
+          readOnly: true
+        objectClass:
+          type: array
+          readOnly: true
+          items:
+            type: string
+        profile:
+          $ref: '#/components/schemas/GroupProfile'
+        type:
+          $ref: '#/components/schemas/GroupType'
+      x-okta-crud:
+      - alias: update
+        arguments:
+        - dest: groupId
+          src: id
+        - dest: group
+          self: true
+        operationId: updateGroup
+      - alias: delete
+        arguments:
+        - dest: groupId
+          src: id
+        operationId: deleteGroup
+      x-okta-operations:
+      - alias: removeUser
+        arguments:
+        - dest: groupId
+          src: id
+        operationId: removeUserFromGroup
+      - alias: listUsers
+        arguments:
+        - dest: groupId
+          src: id
+        operationId: listGroupUsers
+      - alias: listApplications
+        arguments:
+        - dest: groupId
+          src: id
+        operationId: listAssignedApplicationsForGroup
+      - alias: assignRole
+        arguments:
+        - dest: groupId
+          src: id
+        operationId: assignRoleToGroup
+      x-okta-tags:
+      - Group
+    GroupProfile:
+      type: object
+      properties:
+        description:
+          type: string
+        name:
+          type: string
+      x-okta-tags:
+      - Group
+    GroupType:
+      type: string
+      enum:
+      - OKTA_GROUP
+      - APP_GROUP
+      - BUILT_IN
+      x-okta-tags:
+      - Group

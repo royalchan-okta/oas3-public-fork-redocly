@@ -1,0 +1,101 @@
+openapi: 3.0.1
+info:
+  title: Sessions API
+  description: Sessions API
+  version: 1.0.0
+paths:
+  /api/v1/sessions:
+    post:
+      tags:
+      - Session
+      summary: Create Session with Session Token
+      description: Creates a new session for a user with a valid session token. Use
+        this API if, for example, you want to set the session cookie yourself instead
+        of allowing Okta to set it, or want to hold the session ID in order to delete
+        a session via the API instead of visiting the logout URL.
+      operationId: createSession
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '../../components/Session.yaml#/components/schemas/CreateSessionRequest'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/Session.yaml#/components/schemas/Session'
+      security:
+      - api_token: []
+      x-okta-request-body-name: createSessionRequest
+  /api/v1/sessions/{sessionId}:
+    get:
+      tags:
+      - Session
+      summary: Get Session
+      description: Get details about a session.
+      operationId: getSession
+      parameters:
+      - name: sessionId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/Session.yaml#/components/schemas/Session'
+      security:
+      - api_token: []
+    delete:
+      tags:
+      - Session
+      summary: End Session
+      description: End a session.
+      operationId: endSession
+      parameters:
+      - name: sessionId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: No Content
+          content: {}
+      security:
+      - api_token: []
+  /api/v1/sessions/{sessionId}/lifecycle/refresh:
+    post:
+      tags:
+      - Session
+      summary: Refresh Session
+      description: Refresh a session.
+      operationId: refreshSession
+      parameters:
+      - name: sessionId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/Session.yaml#/components/schemas/Session'
+      security:
+      - api_token: []
+components:
+  securitySchemes:
+    api_token:
+      type: apiKey
+      description: SSWS {API Token}
+      name: Authorization
+      in: header

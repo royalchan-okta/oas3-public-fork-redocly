@@ -1,0 +1,139 @@
+openapi: 3.0.1
+info:
+  title: Domains API
+  description: Domains API
+  version: 1.0.0
+paths:
+  /api/v1/domains:
+    get:
+      tags:
+      - Domain
+      summary: List Domains
+      description: List all verified custom Domains for the org.
+      operationId: listDomains
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/Domain.yaml#/components/schemas/DomainListResponse'
+      security:
+      - api_token: []
+    post:
+      tags:
+      - Domain
+      summary: Create Domain
+      description: Creates your domain.
+      operationId: createDomain
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '../../components/Domain.yaml#/components/schemas/Domain'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/Domain.yaml#/components/schemas/DomainResponse'
+      security:
+      - api_token: []
+      x-okta-request-body-name: domain
+  /api/v1/domains/{domainId}/verify:
+    post:
+      tags:
+      - Domain
+      summary: Verify Domain
+      description: Verifies the Domain by `id`.
+      operationId: verifyDomain
+      parameters:
+      - name: domainId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/Domain.yaml#/components/schemas/DomainResponse'
+      security:
+      - api_token: []
+  /api/v1/domains/{domainId}/certificate:
+    put:
+      tags:
+      - Domain
+      summary: Create Certificate
+      description: Creates the Certificate for the Domain.
+      operationId: createCertificate
+      parameters:
+      - name: domainId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '../../components/Domain.yaml#/components/schemas/DomainCertificate'
+        required: true
+      responses:
+        '204':
+          description: No Content
+          content: {}
+      security:
+      - api_token: []
+      x-okta-request-body-name: certificate
+  /api/v1/domains/{domainId}:
+    get:
+      tags:
+      - Domain
+      summary: Get Domain
+      description: Fetches a Domain by `id`.
+      operationId: getDomain
+      parameters:
+      - name: domainId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/Domain.yaml#/components/schemas/DomainResponse'
+      security:
+      - api_token: []
+    delete:
+      tags:
+      - Domain
+      summary: Delete Domain
+      description: Deletes a Domain by `id`.
+      operationId: deleteDomain
+      parameters:
+      - name: domainId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: No Content
+          content: {}
+      security:
+      - api_token: []
+components:
+  securitySchemes:
+    api_token:
+      type: apiKey
+      description: SSWS {API Token}
+      name: Authorization
+      in: header

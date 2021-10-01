@@ -1,0 +1,1815 @@
+openapi: 3.0.1
+info:
+  title: Users API
+  description: Users API
+  version: 1.0.0
+paths:
+  /api/v1/users:
+    get:
+      tags:
+      - User
+      summary: List Users
+      description: Lists users in your organization with pagination in most cases.  A
+        subset of users can be returned that match a supported filter expression or
+        search criteria.
+      operationId: listUsers
+      parameters:
+      - name: q
+        in: query
+        description: Finds a user that matches firstName, lastName, and email properties
+        schema:
+          type: string
+      - name: after
+        in: query
+        description: Specifies the pagination cursor for the next page of users
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Specifies the number of results returned
+        schema:
+          type: integer
+          format: int32
+          default: 10
+      - name: filter
+        in: query
+        description: Filters users with a supported expression for a subset of properties
+        schema:
+          type: string
+      - name: search
+        in: query
+        description: Searches for users with a supported filtering  expression for
+          most properties
+        schema:
+          type: string
+      - name: sortBy
+        in: query
+        schema:
+          type: string
+      - name: sortOrder
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '../../components/User.yaml#/components/schemas/User'
+      security:
+      - api_token: []
+    post:
+      tags:
+      - User
+      summary: Create User
+      description: Creates a new user in your Okta organization with or without credentials.
+      operationId: createUser
+      parameters:
+      - name: activate
+        in: query
+        description: Executes activation lifecycle operation when creating the user
+        schema:
+          type: boolean
+          default: true
+      - name: provider
+        in: query
+        description: Indicates whether to create a user with a specified authentication
+          provider
+        schema:
+          type: boolean
+          default: false
+      - name: nextLogin
+        in: query
+        description: With activate=true, set nextLogin to "changePassword" to have
+          the password be EXPIRED, so user must change it the next time they log in.
+        schema:
+          $ref: '../../components/User.yaml#/components/schemas/UserNextLogin'
+        x-okta-added-version: 0.14.0
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '../../components/User.yaml#/components/schemas/CreateUserRequest'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/User.yaml#/components/schemas/User'
+      security:
+      - api_token: []
+      x-okta-request-body-name: body
+  /api/v1/users/{associatedUserId}/linkedObjects/{primaryRelationshipName}/{primaryUserId}:
+    put:
+      tags:
+      - User
+      operationId: setLinkedObjectForUser
+      summary: Set Linked Object for User
+      description: Sets a linked object for a user.
+      parameters:
+      - name: associatedUserId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: primaryRelationshipName
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: primaryUserId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Success
+          content: {}
+  /api/v1/users/{userId}:
+    get:
+      tags:
+      - User
+      summary: Get User
+      description: Fetches a user from your Okta organization.
+      operationId: getUser
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/User.yaml#/components/schemas/User'
+      security:
+      - api_token: []
+    put:
+      tags:
+      - User
+      summary: Update User
+      description: Update a user's profile and/or credentials using strict-update
+        semantics.
+      operationId: updateUser
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: strict
+        in: query
+        schema:
+          type: boolean
+        x-okta-added-version: 1.10.0
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '../../components/User.yaml#/components/schemas/User'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/User.yaml#/components/schemas/User'
+      security:
+      - api_token: []
+      x-okta-request-body-name: user
+    post:
+      tags:
+      - User
+      description: Fetch a user by `id`, `login`, or `login shortname` if the short
+        name is unambiguous.
+      operationId: partialUpdateUser
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: strict
+        in: query
+        schema:
+          type: boolean
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '../../components/User.yaml#/components/schemas/User'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/User.yaml#/components/schemas/User'
+      security:
+      - api_token: []
+      x-okta-request-body-name: user
+    delete:
+      tags:
+      - User
+      summary: Delete User
+      description: Deletes a user permanently.  This operation can only be performed
+        on users that have a `DEPROVISIONED` status.  **This action cannot be recovered!**
+      operationId: deactivateOrDeleteUser
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: sendEmail
+        in: query
+        schema:
+          type: boolean
+          default: false
+        x-okta-added-version: 1.5.0
+      responses:
+        '202':
+          description: ACCEPTED
+          content: {}
+      security:
+      - api_token: []
+  /api/v1/users/{userId}/appLinks:
+    get:
+      tags:
+      - User
+      summary: Get Assigned App Links
+      description: Fetches appLinks for all direct or indirect (via group membership)
+        assigned applications.
+      operationId: listAppLinks
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '../../components/User.yaml#/components/schemas/AppLink'
+      security:
+      - api_token: []
+  /api/v1/users/{userId}/clients:
+    get:
+      tags:
+      - User
+      description: Lists all client resources for which the specified user has grants
+        or tokens.
+      operationId: listUserClients
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '../../components/Application.yaml#/components/schemas/OAuth2Client'
+      security:
+      - api_token: []
+  /api/v1/users/{userId}/clients/{clientId}/grants:
+    get:
+      tags:
+      - User
+      description: Lists all grants for a specified user and client
+      operationId: listGrantsForUserAndClient
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: clientId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: expand
+        in: query
+        schema:
+          type: string
+      - name: after
+        in: query
+        schema:
+          type: string
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 20
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '../../components/Application.yaml#/components/schemas/OAuth2ScopeConsentGrant'
+      security:
+      - api_token: []
+    delete:
+      tags:
+      - User
+      description: Revokes all grants for the specified user and client
+      operationId: revokeGrantsForUserAndClient
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: clientId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: No Content
+          content: {}
+      security:
+      - api_token: []
+  /api/v1/users/{userId}/clients/{clientId}/tokens:
+    get:
+      tags:
+      - User
+      description: Lists all refresh tokens issued for the specified User and Client.
+      operationId: listRefreshTokensForUserAndClient
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: clientId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: expand
+        in: query
+        schema:
+          type: string
+      - name: after
+        in: query
+        schema:
+          type: string
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 20
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '../../components/Application.yaml#/components/schemas/OAuth2RefreshToken'
+      security:
+      - api_token: []
+    delete:
+      tags:
+      - User
+      description: Revokes all refresh tokens issued for the specified User and Client.
+      operationId: revokeTokensForUserAndClient
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: clientId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: No Content
+          content: {}
+      security:
+      - api_token: []
+  /api/v1/users/{userId}/clients/{clientId}/tokens/{tokenId}:
+    get:
+      tags:
+      - User
+      description: Gets a refresh token issued for the specified User and Client.
+      operationId: getRefreshTokenForUserAndClient
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: clientId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: tokenId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: expand
+        in: query
+        schema:
+          type: string
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          default: 20
+      - name: after
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/Application.yaml#/components/schemas/OAuth2RefreshToken'
+      security:
+      - api_token: []
+    delete:
+      tags:
+      - User
+      description: Revokes the specified refresh token.
+      operationId: revokeTokenForUserAndClient
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: clientId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: tokenId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: No Content
+          content: {}
+      security:
+      - api_token: []
+  /api/v1/users/{userId}/credentials/change_password:
+    post:
+      tags:
+      - User
+      summary: Change Password
+      description: Changes a user's password by validating the user's current password.
+        This operation can only be performed on users in `STAGED`, `ACTIVE`, `PASSWORD_EXPIRED`,
+        or `RECOVERY` status that have a valid password credential
+      operationId: changePassword
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: strict
+        in: query
+        schema:
+          type: boolean
+        x-okta-added-version: 1.10.0
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '../../components/User.yaml#/components/schemas/ChangePasswordRequest'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/User.yaml#/components/schemas/UserCredentials'
+      security:
+      - api_token: []
+      x-okta-request-body-name: changePasswordRequest
+  /api/v1/users/{userId}/credentials/change_recovery_question:
+    post:
+      tags:
+      - User
+      summary: Change Recovery Question
+      description: Changes a user's recovery question & answer credential by validating
+        the user's current password.  This operation can only be performed on users
+        in **STAGED**, **ACTIVE** or **RECOVERY** `status` that have a valid password
+        credential
+      operationId: changeRecoveryQuestion
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '../../components/User.yaml#/components/schemas/UserCredentials'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/User.yaml#/components/schemas/UserCredentials'
+      security:
+      - api_token: []
+      x-okta-request-body-name: userCredentials
+  /api/v1/users/{userId}/credentials/forgot_password:
+    post:
+      tags:
+      - User
+      summary: Initiate Forgot Password
+      description: Initiate forgot password flow. Generates a one-time token (OTT) that 
+        can be used to reset a user's password.
+      operationId: forgotPassword
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: sendEmail
+        in: query
+        required: false
+        schema:
+          type: boolean
+          default: true
+      responses:
+        '200':
+          description: Reset url
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/User.yaml#/components/schemas/ForgotPasswordResponse'
+      security:
+      - api_token: []
+  /api/v1/users/{userId}/credentials/forgot_password_recovery_question:
+    post:
+      tags:
+      - User
+      summary: Reset Password with Recovery Question
+      description: Resets the user's password to the specified password if the provided
+        answer to the recovery question is correct.
+      operationId: forgotPasswordSetNewPassword
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: sendEmail
+        in: query
+        required: false
+        schema:
+          type: boolean
+          default: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '../../components/User.yaml#/components/schemas/UserCredentials'
+      responses:
+        '200':
+          description: Credentials
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/User.yaml#/components/schemas/UserCredentials'
+      security:
+      - api_token: []
+      x-okta-request-body-name: userCredentials
+  /api/v1/users/{userId}/factors:
+    get:
+      tags:
+      - UserFactor
+      description: Enumerates all the enrolled factors for the specified user
+      operationId: listFactors
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '../../components/UserFactor.yaml#/components/schemas/UserFactor'
+      security:
+      - api_token: []
+    post:
+      tags:
+      - UserFactor
+      summary: Enroll Factor
+      description: Enrolls a user with a supported factor.
+      operationId: enrollFactor
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: updatePhone
+        in: query
+        schema:
+          type: boolean
+          default: false
+      - name: templateId
+        in: query
+        description: id of SMS template (only for SMS factor)
+        schema:
+          type: string
+      - name: tokenLifetimeSeconds
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 300
+        x-okta-added-version: 1.3.0
+      - name: activate
+        in: query
+        schema:
+          type: boolean
+          default: false
+        x-okta-added-version: 1.3.0
+      requestBody:
+        description: Factor
+        content:
+          application/json:
+            schema:
+              $ref: '../../components/UserFactor.yaml#/components/schemas/UserFactor'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/UserFactor.yaml#/components/schemas/UserFactor'
+      security:
+      - api_token: []
+      x-okta-request-body-name: body
+  /api/v1/users/{userId}/factors/catalog:
+    get:
+      tags:
+      - UserFactor
+      description: Enumerates all the supported factors that can be enrolled for the
+        specified user
+      operationId: listSupportedFactors
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '../../components/UserFactor.yaml#/components/schemas/UserFactor'
+      security:
+      - api_token: []
+  /api/v1/users/{userId}/factors/questions:
+    get:
+      tags:
+      - UserFactor
+      description: Enumerates all available security questions for a user's `question`
+        factor
+      operationId: listSupportedSecurityQuestions
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '../../components/UserFactor.yaml#/components/schemas/SecurityQuestion'
+      security:
+      - api_token: []
+  /api/v1/users/{userId}/factors/{factorId}:
+    get:
+      tags:
+      - UserFactor
+      description: Fetches a factor for the specified user
+      operationId: getFactor
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: factorId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/UserFactor.yaml#/components/schemas/UserFactor'
+      security:
+      - api_token: []
+    delete:
+      tags:
+      - UserFactor
+      description: Unenrolls an existing factor for the specified user, allowing the
+        user to enroll a new factor.
+      operationId: deleteFactor
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: factorId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: No Content
+          content: {}
+      security:
+      - api_token: []
+  /api/v1/users/{userId}/factors/{factorId}/lifecycle/activate:
+    post:
+      tags:
+      - UserFactor
+      summary: Activate Factor
+      description: The `sms` and `token:software:totp` factor types require activation
+        to complete the enrollment process.
+      operationId: activateFactor
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: factorId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '../../components/UserFactor.yaml#/components/schemas/ActivateFactorRequest'
+        required: false
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/UserFactor.yaml#/components/schemas/UserFactor'
+      security:
+      - api_token: []
+      x-okta-request-body-name: body
+  /api/v1/users/{userId}/factors/{factorId}/transactions/{transactionId}:
+    get:
+      tags:
+      - UserFactor
+      description: Polls factors verification transaction for status.
+      operationId: getFactorTransactionStatus
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: factorId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: transactionId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/UserFactor.yaml#/components/schemas/VerifyUserFactorResponse'
+      security:
+      - api_token: []
+  /api/v1/users/{userId}/factors/{factorId}/verify:
+    post:
+      tags:
+      - UserFactor
+      summary: Verify MFA Factor
+      description: Verifies an OTP for a `token` or `token:hardware` factor
+      operationId: verifyFactor
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: factorId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: templateId
+        in: query
+        schema:
+          type: string
+      - name: tokenLifetimeSeconds
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 300
+        x-okta-added-version: 1.3.0
+      - name: X-Forwarded-For
+        in: header
+        schema:
+          type: string
+        x-okta-added-version: 1.11.0
+      - name: User-Agent
+        in: header
+        schema:
+          type: string
+        x-okta-added-version: 1.11.0
+      - name: Accept-Language
+        in: header
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '../../components/UserFactor.yaml#/components/schemas/VerifyFactorRequest'
+        required: false
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/UserFactor.yaml#/components/schemas/VerifyUserFactorResponse'
+      security:
+      - api_token: []
+      x-okta-request-body-name: body
+  /api/v1/users/{userId}/grants:
+    get:
+      tags:
+      - User
+      description: Lists all grants for the specified user
+      operationId: listUserGrants
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: scopeId
+        in: query
+        schema:
+          type: string
+      - name: expand
+        in: query
+        schema:
+          type: string
+      - name: after
+        in: query
+        schema:
+          type: string
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 20
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '../../components/Application.yaml#/components/schemas/OAuth2ScopeConsentGrant'
+      security:
+      - api_token: []
+    delete:
+      tags:
+      - User
+      description: Revokes all grants for a specified user
+      operationId: revokeUserGrants
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: No Content
+          content: {}
+      security:
+      - api_token: []
+  /api/v1/users/{userId}/grants/{grantId}:
+    get:
+      tags:
+      - User
+      description: Gets a grant for the specified user
+      operationId: getUserGrant
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: grantId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: expand
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/Application.yaml#/components/schemas/OAuth2ScopeConsentGrant'
+      security:
+      - api_token: []
+    delete:
+      tags:
+      - User
+      description: Revokes one grant for a specified user
+      operationId: revokeUserGrant
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: grantId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: No Content
+          content: {}
+      security:
+      - api_token: []
+  /api/v1/users/{userId}/groups:
+    get:
+      tags:
+      - User
+      summary: Get Member Groups
+      description: Fetches the groups of which the user is a member.
+      operationId: listUserGroups
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '../../components/Group.yaml#/components/schemas/Group'
+      security:
+      - api_token: []
+  /api/v1/users/{userId}/idps:
+    get:
+      tags:
+      - User
+      summary: Listing IdPs associated with a user
+      description: Lists the IdPs associated with the user.
+      operationId: listUserIdentityProviders
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '../../components/IdentityProvider.yaml#/components/schemas/IdentityProvider'
+      security:
+      - api_token: []
+  /api/v1/users/{userId}/lifecycle/activate:
+    post:
+      tags:
+      - User
+      summary: Activate User
+      description: Activates a user.  This operation can only be performed on users
+        with a `STAGED` status.  Activation of a user is an asynchronous operation.
+        The user will have the `transitioningToStatus` property with a value of `ACTIVE`
+        during activation to indicate that the user hasn't completed the asynchronous
+        operation.  The user will have a status of `ACTIVE` when the activation process
+        is complete.
+      operationId: activateUser
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: sendEmail
+        in: query
+        description: Sends an activation email to the user if true
+        required: true
+        schema:
+          type: boolean
+          default: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/User.yaml#/components/schemas/UserActivationToken'
+      security:
+      - api_token: []
+  /api/v1/users/{userId}/lifecycle/deactivate:
+    post:
+      tags:
+      - User
+      summary: Deactivate User
+      description: Deactivates a user.  This operation can only be performed on users
+        that do not have a `DEPROVISIONED` status.  Deactivation of a user is an asynchronous
+        operation.  The user will have the `transitioningToStatus` property with a
+        value of `DEPROVISIONED` during deactivation to indicate that the user hasn't
+        completed the asynchronous operation.  The user will have a status of `DEPROVISIONED`
+        when the deactivation process is complete.
+      operationId: deactivateUser
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: sendEmail
+        in: query
+        schema:
+          type: boolean
+          default: false
+        x-okta-added-version: 1.5.0
+      responses:
+        '200':
+          description: OK
+          content: {}
+      security:
+      - api_token: []
+  /api/v1/users/{userId}/lifecycle/expire_password:
+    post:
+      tags:
+      - User
+      summary: Expire Password
+      description: This operation transitions the user to the status of `PASSWORD_EXPIRED`
+        so that the user is required to change their password at their next login.
+      operationId: expirePassword
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/User.yaml#/components/schemas/User'
+      security:
+      - api_token: []
+  /api/v1/users/{userId}/lifecycle/expire_password_with_temp_password:
+    post:
+      tags:
+      - User
+      summary: Expire Password and Set Temporary Password
+      description: This operation transitions the user to the status of `PASSWORD_EXPIRED`
+        so that the user is required to change their password at their next login, and 
+        also sets the user's password to a temporary password returned in the response.
+      operationId: expirePasswordAndGetTemporaryPassword
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/User.yaml#/components/schemas/TempPassword'
+      security:
+      - api_token: []
+  /api/v1/users/{userId}/lifecycle/reactivate:
+    post:
+      tags:
+      - User
+      summary: Reactivate User
+      description: Reactivates a user.  This operation can only be performed on users
+        with a `PROVISIONED` status.  This operation restarts the activation workflow
+        if for some reason the user activation was not completed when using the activationToken
+        from [Activate User](#activate-user).
+      operationId: reactivateUser
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: sendEmail
+        in: query
+        description: Sends an activation email to the user if true
+        schema:
+          type: boolean
+          default: false
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/User.yaml#/components/schemas/UserActivationToken'
+      security:
+      - api_token: []
+  /api/v1/users/{userId}/lifecycle/reset_factors:
+    post:
+      tags:
+      - User
+      summary: Reset Factors
+      description: This operation resets all factors for the specified user. All MFA
+        factor enrollments returned to the unenrolled state. The user's status remains
+        ACTIVE. This link is present only if the user is currently enrolled in one
+        or more MFA factors.
+      operationId: resetFactors
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content: {}
+      security:
+      - api_token: []
+  /api/v1/users/{userId}/lifecycle/reset_password:
+    post:
+      tags:
+      - User
+      summary: Reset Password
+      description: Generates a one-time token (OTT) that can be used to reset a user's
+        password.  The OTT link can be automatically emailed to the user or returned
+        to the API caller and distributed using a custom flow.
+      operationId: resetPassword
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: sendEmail
+        in: query
+        required: true
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/User.yaml#/components/schemas/ResetPasswordToken'
+      security:
+      - api_token: []
+  /api/v1/users/{userId}/lifecycle/suspend:
+    post:
+      tags:
+      - User
+      summary: Suspend User
+      description: Suspends a user.  This operation can only be performed on users
+        with an `ACTIVE` status.  The user will have a status of `SUSPENDED` when
+        the process is complete.
+      operationId: suspendUser
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content: {}
+      security:
+      - api_token: []
+  /api/v1/users/{userId}/lifecycle/unlock:
+    post:
+      tags:
+      - User
+      summary: Unlock User
+      description: Unlocks a user with a `LOCKED_OUT` status and returns them to `ACTIVE`
+        status.  Users will be able to login with their current password.
+      operationId: unlockUser
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content: {}
+      security:
+      - api_token: []
+  /api/v1/users/{userId}/lifecycle/unsuspend:
+    post:
+      tags:
+      - User
+      summary: Unsuspend User
+      description: Unsuspends a user and returns them to the `ACTIVE` state.  This
+        operation can only be performed on users that have a `SUSPENDED` status.
+      operationId: unsuspendUser
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content: {}
+      security:
+      - api_token: []
+  /api/v1/users/{userId}/linkedObjects/{relationshipName}:
+    get:
+      tags:
+      - User
+      description: Get linked objects for a user, relationshipName can be a primary
+        or associated relationship name
+      operationId: getLinkedObjectsForUser
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: relationshipName
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: after
+        in: query
+        schema:
+          type: string
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: -1
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '../../components/User.yaml#/components/schemas/ResponseLinks'
+      security:
+      - api_token: []
+    delete:
+      tags:
+      - User
+      description: Delete linked objects for a user, relationshipName can be ONLY
+        a primary relationship name
+      operationId: removeLinkedObjectForUser
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: relationshipName
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: No Content
+          content: {}
+      security:
+      - api_token: []
+  /api/v1/users/{userId}/roles:
+    get:
+      tags:
+      - User
+      description: Lists all roles assigned to a user.
+      operationId: listAssignedRolesForUser
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: expand
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '../../components/User.yaml#/components/schemas/Role'
+      security:
+      - api_token: []
+    post:
+      tags:
+      - User
+      description: Assigns a role to a user.
+      operationId: assignRoleToUser
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: disableNotifications
+        in: query
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '../../components/Role.yaml#/components/schemas/AssignRoleRequest'
+        required: true
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/User.yaml#/components/schemas/Role'
+      security:
+      - api_token: []
+      x-okta-request-body-name: assignRoleRequest
+  /api/v1/users/{userId}/roles/{roleId}:
+    delete:
+      tags:
+      - User
+      description: Unassigns a role from a user.
+      operationId: removeRoleFromUser
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: roleId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: No Content
+          content: {}
+      security:
+      - api_token: []
+    get:
+      description: Gets role that is assigned to user.
+      operationId: getUserRole
+      parameters:
+      - in: path
+        name: userId
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: roleId
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/User.yaml#/components/schemas/Role'
+      security:
+      - api_token: []
+      tags:
+      - User
+  /api/v1/users/{userId}/roles/{roleId}/targets/catalog/apps:
+    get:
+      tags:
+      - User
+      description: Lists all App targets for an `APP_ADMIN` Role assigned to a User.
+        This methods return list may include full Applications or Instances. The response
+        for an instance will have an `ID` value, while Application will not have an
+        ID.
+      operationId: listApplicationTargetsForApplicationAdministratorRoleForUser
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: roleId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: after
+        in: query
+        schema:
+          type: string
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 20
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '../../components/Role.yaml#/components/schemas/CatalogApplication'
+      security:
+      - api_token: []
+    put:
+      tags:
+      - User
+      description: Success
+      operationId: addAllAppsAsTargetToRole
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: roleId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content: {}
+      security:
+      - api_token: []
+  /api/v1/users/{userId}/roles/{roleId}/targets/catalog/apps/{appName}:
+    put:
+      tags:
+      - User
+      description: Success
+      operationId: addApplicationTargetToAdminRoleForUser
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: roleId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: appName
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content: {}
+      security:
+      - api_token: []
+    delete:
+      tags:
+      - User
+      description: Success
+      operationId: removeApplicationTargetFromApplicationAdministratorRoleForUser
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: roleId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: appName
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: No Content
+          content: {}
+      security:
+      - api_token: []
+  /api/v1/users/{userId}/roles/{roleId}/targets/catalog/apps/{appName}/{applicationId}:
+    put:
+      tags:
+      - User
+      summary: Add App Instance Target to App Administrator Role given to a User
+      description: Add App Instance Target to App Administrator Role given to a User
+      operationId: addApplicationTargetToAppAdminRoleForUser
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: roleId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: appName
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: applicationId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: No Content
+          content: {}
+      security:
+      - api_token: []
+    delete:
+      tags:
+      - User
+      summary: Remove App Instance Target to App Administrator Role given to a User
+      description: Remove App Instance Target to App Administrator Role given to a
+        User
+      operationId: removeApplicationTargetFromAdministratorRoleForUser
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: roleId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: appName
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: applicationId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: No Content
+          content: {}
+      security:
+      - api_token: []
+  /api/v1/users/{userId}/roles/{roleId}/targets/groups:
+    get:
+      tags:
+      - User
+      description: Success
+      operationId: listGroupTargetsForRole
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: roleId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: after
+        in: query
+        schema:
+          type: string
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 20
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '../../components/Group.yaml#/components/schemas/Group'
+      security:
+      - api_token: []
+  /api/v1/users/{userId}/roles/{roleId}/targets/groups/{groupId}:
+    put:
+      tags:
+      - User
+      description: Success
+      operationId: addGroupTargetToRole
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: roleId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: groupId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content: {}
+      security:
+      - api_token: []
+    delete:
+      tags:
+      - User
+      description: Success
+      operationId: removeGroupTargetFromRole
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: roleId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: groupId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: No Content
+          content: {}
+      security:
+      - api_token: []
+  /api/v1/users/{userId}/sessions:
+    delete:
+      tags:
+      - User
+      description: Removes all active identity provider sessions. This forces the
+        user to authenticate on the next operation. Optionally revokes OpenID Connect
+        and OAuth refresh and access tokens issued to the user.
+      operationId: clearUserSessions
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: oauthTokens
+        in: query
+        description: Revoke issued OpenID Connect and OAuth refresh and access tokens
+        schema:
+          type: boolean
+          default: false
+      responses:
+        '204':
+          description: No Content
+          content: {}
+      security:
+      - api_token: []
+components:
+  securitySchemes:
+    api_token:
+      type: apiKey
+      description: SSWS {API Token}
+      name: Authorization
+      in: header

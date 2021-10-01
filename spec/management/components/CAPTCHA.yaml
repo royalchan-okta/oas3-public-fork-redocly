@@ -1,0 +1,54 @@
+openapi: 3.0.1
+info:
+  title: CAPTCHA Components
+  version: 1.0.0
+paths: {}
+components:
+  schemas:
+    CAPTCHAInstance:
+      title: CAPTCHAInstance
+      type: object
+      description: ''
+      x-examples:
+        example-1:
+          id: abcd1234
+          name: myHCaptcha
+          secretKey: xxxxxxxxxxx
+          siteKey: xxxxxxxxxxx
+          type: HCAPTCHA
+          _link:
+            self:
+              href: https://your-subdomain.okta.com/api/v1/captchas/abcd1234
+              hints:
+                allow:
+                - GET
+                - POST
+                - PUT
+                - DELETE
+      properties:
+        id:
+          type: string
+          readOnly: true
+        name:
+          type: string
+        secretKey:
+          type: string
+          writeOnly: true
+        siteKey:
+          type: string
+        type:
+          type: string
+          enum:
+          - HCAPTCHA
+          - RECAPTCHA_V2
+        _link:
+          type: object
+          properties:
+            self:
+              $ref: './Common.yaml#/components/schemas/HrefObject'
+          readOnly: true
+      x-okta-operations:
+      - alias: update
+        operationId: updateCaptchaInstance
+      x-okta-tags:
+      - CAPTCHA

@@ -1,0 +1,49 @@
+openapi: 3.0.1
+info:
+  title: Threats API
+  description: Threats API
+  version: 1.0.0
+paths:
+  /api/v1/threats/configuration:
+    get:
+      tags:
+      - ThreatInsight
+      description: Gets current ThreatInsight configuration
+      operationId: getCurrentConfiguration
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/ThreatInsight.yaml#/components/schemas/ThreatInsightConfiguration'
+      security:
+      - api_token: []
+    post:
+      tags:
+      - ThreatInsight
+      description: Updates ThreatInsight configuration
+      operationId: updateConfiguration
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '../../components/ThreatInsight.yaml#/components/schemas/ThreatInsightConfiguration'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/ThreatInsight.yaml#/components/schemas/ThreatInsightConfiguration'
+      security:
+      - api_token: []
+      x-okta-request-body-name: threatInsightConfiguration
+components:
+  securitySchemes:
+    api_token:
+      type: apiKey
+      description: SSWS {API Token}
+      name: Authorization
+      in: header

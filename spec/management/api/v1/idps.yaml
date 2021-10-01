@@ -1,0 +1,693 @@
+openapi: 3.0.1
+info:
+  title: Idps API
+  description: Idps API
+  version: 1.0.0
+paths:
+  /api/v1/idps:
+    get:
+      tags:
+      - IdentityProvider
+      summary: List Identity Providers
+      description: Enumerates IdPs in your organization with pagination. A subset
+        of IdPs can be returned that match a supported filter expression or query.
+      operationId: listIdentityProviders
+      parameters:
+      - name: q
+        in: query
+        description: Searches the name property of IdPs for matching value
+        schema:
+          type: string
+      - name: after
+        in: query
+        description: Specifies the pagination cursor for the next page of IdPs
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Specifies the number of IdP results in a page
+        schema:
+          type: integer
+          format: int32
+          default: 20
+      - name: type
+        in: query
+        description: Filters IdPs by type
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '../../components/IdentityProvider.yaml#/components/schemas/IdentityProvider'
+      security:
+      - api_token: []
+    post:
+      tags:
+      - IdentityProvider
+      summary: Add Identity Provider
+      description: Adds a new IdP to your organization.
+      operationId: createIdentityProvider
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '../../components/IdentityProvider.yaml#/components/schemas/IdentityProvider'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/IdentityProvider.yaml#/components/schemas/IdentityProvider'
+      security:
+      - api_token: []
+      x-okta-request-body-name: identityProvider
+  /api/v1/idps/credentials/keys:
+    get:
+      tags:
+      - IdentityProvider
+      summary: List Keys
+      description: Enumerates IdP key credentials.
+      operationId: listIdentityProviderKeys
+      parameters:
+      - name: after
+        in: query
+        description: Specifies the pagination cursor for the next page of keys
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Specifies the number of key results in a page
+        schema:
+          type: integer
+          format: int32
+          default: 20
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '../../components/Application.yaml#/components/schemas/JsonWebKey'
+      security:
+      - api_token: []
+    post:
+      tags:
+      - IdentityProvider
+      summary: Add X.509 Certificate Public Key
+      description: Adds a new X.509 certificate credential to the IdP key store.
+      operationId: createIdentityProviderKey
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '../../components/Application.yaml#/components/schemas/JsonWebKey'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/Application.yaml#/components/schemas/JsonWebKey'
+      security:
+      - api_token: []
+      x-okta-request-body-name: jsonWebKey
+  /api/v1/idps/credentials/keys/{keyId}:
+    get:
+      tags:
+      - IdentityProvider
+      summary: Get Key
+      description: Gets a specific IdP Key Credential by `kid`
+      operationId: getIdentityProviderKey
+      parameters:
+      - name: keyId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/Application.yaml#/components/schemas/JsonWebKey'
+      security:
+      - api_token: []
+    delete:
+      tags:
+      - IdentityProvider
+      summary: Delete Key
+      description: Deletes a specific IdP Key Credential by `kid` if it is not currently
+        being used by an Active or Inactive IdP.
+      operationId: deleteIdentityProviderKey
+      parameters:
+      - name: keyId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: No Content
+          content: {}
+      security:
+      - api_token: []
+  /api/v1/idps/{idpId}:
+    get:
+      tags:
+      - IdentityProvider
+      summary: Get Identity Provider
+      description: Fetches an IdP by `id`.
+      operationId: getIdentityProvider
+      parameters:
+      - name: idpId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/IdentityProvider.yaml#/components/schemas/IdentityProvider'
+      security:
+      - api_token: []
+    put:
+      tags:
+      - IdentityProvider
+      summary: Update Identity Provider
+      description: Updates the configuration for an IdP.
+      operationId: updateIdentityProvider
+      parameters:
+      - name: idpId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '../../components/IdentityProvider.yaml#/components/schemas/IdentityProvider'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/IdentityProvider.yaml#/components/schemas/IdentityProvider'
+      security:
+      - api_token: []
+      x-okta-request-body-name: identityProvider
+    delete:
+      tags:
+      - IdentityProvider
+      summary: Delete Identity Provider
+      description: Removes an IdP from your organization.
+      operationId: deleteIdentityProvider
+      parameters:
+      - name: idpId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: No Content
+          content: {}
+      security:
+      - api_token: []
+  /api/v1/idps/{idpId}/credentials/csrs:
+    get:
+      tags:
+      - IdentityProvider
+      summary: List Certificate Signing Requests for IdP
+      description: Enumerates Certificate Signing Requests for an IdP
+      operationId: listCsrsForIdentityProvider
+      parameters:
+      - name: idpId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '../../components/Application.yaml#/components/schemas/Csr'
+      security:
+      - api_token: []
+    post:
+      tags:
+      - IdentityProvider
+      summary: Generate Certificate Signing Request for IdP
+      description: Generates a new key pair and returns a Certificate Signing Request
+        for it.
+      operationId: generateCsrForIdentityProvider
+      parameters:
+      - name: idpId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '../../components/Application.yaml#/components/schemas/CsrMetadata'
+        required: true
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/Application.yaml#/components/schemas/Csr'
+      security:
+      - api_token: []
+      x-okta-request-body-name: metadata
+  /api/v1/idps/{idpId}/credentials/csrs/{csrId}:
+    get:
+      tags:
+      - IdentityProvider
+      description: Gets a specific Certificate Signing Request model by id
+      operationId: getCsrForIdentityProvider
+      parameters:
+      - name: idpId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: csrId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/Application.yaml#/components/schemas/Csr'
+      security:
+      - api_token: []
+    delete:
+      tags:
+      - IdentityProvider
+      description: Revoke a Certificate Signing Request and delete the key pair from
+        the IdP
+      operationId: revokeCsrForIdentityProvider
+      parameters:
+      - name: idpId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: csrId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: No Content
+          content: {}
+      security:
+      - api_token: []
+  /api/v1/idps/{idpId}/credentials/csrs/{csrId}/lifecycle/publish:
+    post:
+      tags:
+      - IdentityProvider
+      description: Update the Certificate Signing Request with a signed X.509 certificate
+        and add it into the signing key credentials for the IdP.
+      operationId: publishCsrForIdentityProvider
+      parameters:
+      - name: idpId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: csrId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/octet-stream:
+            schema:
+              type: string
+              format: binary
+          application/x-x509-ca-cert:
+            schema:
+              oneOf:
+                - type: string
+                  format: binary
+                  x-okta-operationId: publishBinaryCerCertForIdentityProvider
+                - type: string
+                  format: base64
+                  x-okta-operationId: publishBase64CerCertForIdentityProvider
+          application/pkix-cert:
+            schema:
+              oneOf:
+                - type: string
+                  format: binary
+                  x-okta-operationId: publishBinaryDerCertForIdentityProvider
+                - type: string
+                  format: base64
+                  x-okta-operationId: publishBase64DerCertForIdentityProvider
+          application/x-pem-file:
+            schema:
+              type: string
+              format: binary
+              x-okta-operationId: publishBinaryPemCertForIdentityProvider
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/Application.yaml#/components/schemas/JsonWebKey'
+      security:
+      - api_token: []
+  /api/v1/idps/{idpId}/credentials/keys:
+    get:
+      tags:
+      - IdentityProvider
+      summary: List Signing Key Credentials for IdP
+      description: Enumerates signing key credentials for an IdP
+      operationId: listIdentityProviderSigningKeys
+      parameters:
+      - name: idpId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '../../components/Application.yaml#/components/schemas/JsonWebKey'
+      security:
+      - api_token: []
+  /api/v1/idps/{idpId}/credentials/keys/generate:
+    post:
+      tags:
+      - IdentityProvider
+      summary: Generate New IdP Signing Key Credential
+      description: Generates a new X.509 certificate for an IdP signing key credential
+        to be used for signing assertions sent to the IdP
+      operationId: generateIdentityProviderSigningKey
+      parameters:
+      - name: idpId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: validityYears
+        in: query
+        description: expiry of the IdP Key Credential
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/Application.yaml#/components/schemas/JsonWebKey'
+      security:
+      - api_token: []
+  /api/v1/idps/{idpId}/credentials/keys/{keyId}:
+    get:
+      tags:
+      - IdentityProvider
+      summary: Get Signing Key Credential for IdP
+      description: Gets a specific IdP Key Credential by `kid`
+      operationId: getIdentityProviderSigningKey
+      parameters:
+      - name: idpId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: keyId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/Application.yaml#/components/schemas/JsonWebKey'
+      security:
+      - api_token: []
+  /api/v1/idps/{idpId}/credentials/keys/{keyId}/clone:
+    post:
+      tags:
+      - IdentityProvider
+      summary: Clone Signing Key Credential for IdP
+      description: Clones a X.509 certificate for an IdP signing key credential from
+        a source IdP to target IdP
+      operationId: cloneIdentityProviderKey
+      parameters:
+      - name: idpId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: keyId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: targetIdpId
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/Application.yaml#/components/schemas/JsonWebKey'
+      security:
+      - api_token: []
+  /api/v1/idps/{idpId}/lifecycle/activate:
+    post:
+      tags:
+      - IdentityProvider
+      summary: Activate Identity Provider
+      description: Activates an inactive IdP.
+      operationId: activateIdentityProvider
+      parameters:
+      - name: idpId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/IdentityProvider.yaml#/components/schemas/IdentityProvider'
+      security:
+      - api_token: []
+  /api/v1/idps/{idpId}/lifecycle/deactivate:
+    post:
+      tags:
+      - IdentityProvider
+      summary: Deactivate Identity Provider
+      description: Deactivates an active IdP.
+      operationId: deactivateIdentityProvider
+      parameters:
+      - name: idpId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/IdentityProvider.yaml#/components/schemas/IdentityProvider'
+      security:
+      - api_token: []
+  /api/v1/idps/{idpId}/users:
+    get:
+      tags:
+      - IdentityProvider
+      summary: Find Users
+      description: Find all the users linked to an identity provider
+      operationId: listIdentityProviderApplicationUsers
+      parameters:
+      - name: idpId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '../../components/IdentityProvider.yaml#/components/schemas/IdentityProviderApplicationUser'
+      security:
+      - api_token: []
+  /api/v1/idps/{idpId}/users/{userId}:
+    get:
+      tags:
+      - IdentityProvider
+      description: Fetches a linked IdP user by ID
+      operationId: getIdentityProviderApplicationUser
+      parameters:
+      - name: idpId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/IdentityProvider.yaml#/components/schemas/IdentityProviderApplicationUser'
+      security:
+      - api_token: []
+    post:
+      tags:
+      - IdentityProvider
+      summary: Link a user to a Social IdP without a transaction
+      description: Links an Okta user to an existing Social Identity Provider. This
+        does not support the SAML2 Identity Provider Type
+      operationId: linkUserToIdentityProvider
+      parameters:
+      - name: idpId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '../../components/Policy.yaml#/components/schemas/UserIdentityProviderLinkRequest'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/IdentityProvider.yaml#/components/schemas/IdentityProviderApplicationUser'
+      security:
+      - api_token: []
+      x-okta-request-body-name: userIdentityProviderLinkRequest
+    delete:
+      tags:
+      - IdentityProvider
+      summary: Unlink User from IdP
+      description: Removes the link between the Okta user and the IdP user.
+      operationId: unlinkUserFromIdentityProvider
+      parameters:
+      - name: idpId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: No Content
+          content: {}
+      security:
+      - api_token: []
+  /api/v1/idps/{idpId}/users/{userId}/credentials/tokens:
+    get:
+      tags:
+      - IdentityProvider
+      summary: Social Authentication Token Operation
+      description: Fetches the tokens minted by the Social Authentication Provider
+        when the user authenticates with Okta via Social Auth.
+      operationId: listSocialAuthTokens
+      parameters:
+      - name: idpId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '../../components/IdentityProvider.yaml#/components/schemas/SocialAuthToken'
+      security:
+      - api_token: []
+components:
+  securitySchemes:
+    api_token:
+      type: apiKey
+      description: SSWS {API Token}
+      name: Authorization
+      in: header

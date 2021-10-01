@@ -1,0 +1,313 @@
+openapi: 3.0.1
+info:
+  title: Org API
+  description: Org API
+  version: 1.0.0
+paths:
+  /api/v1/org:
+    get:
+      description: Get settings of your organization.
+      operationId: getOrgSettings
+      parameters: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/Org.yaml#/components/schemas/OrgSetting'
+      security:
+      - api_token: []
+      summary: Get org settings
+      tags:
+      - Org
+    post:
+      description: Partial update settings of your organization.
+      operationId: partialUpdateOrgSetting
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '../../components/Org.yaml#/components/schemas/OrgSetting'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/Org.yaml#/components/schemas/OrgSetting'
+      security:
+      - api_token: []
+      summary: Partial update Org Setting
+      tags:
+      - Org
+    put:
+      description: Update settings of your organization.
+      operationId: updateOrgSetting
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '../../components/Org.yaml#/components/schemas/OrgSetting'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/Org.yaml#/components/schemas/OrgSetting'
+      security:
+      - api_token: []
+      summary: Update Org setting
+      tags:
+      - Org
+      x-okta-request-body-name: orgSetting
+  /api/v1/org/contacts:
+    get:
+      description: Gets Contact Types of your organization.
+      operationId: getOrgContactTypes
+      parameters: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '../../components/Org.yaml#/components/schemas/OrgContactTypeObj'
+                type: array
+      security:
+      - api_token: []
+      summary: Get org contact types
+      tags:
+      - Org
+  /api/v1/org/contacts/{contactType}:
+    get:
+      description: Retrieves the URL of the User associated with the specified Contact Type.
+      operationId: getOrgContactUser
+      parameters:
+      - in: path
+        name: contactType
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/Org.yaml#/components/schemas/OrgContactUser'
+      security:
+      - api_token: []
+      summary: Get org contact user
+      tags:
+      - Org
+    put:
+      description: Updates the User associated with the specified Contact Type.
+      operationId: updateOrgContactUser
+      parameters:
+      - in: path
+        name: contactType
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '../../components/Org.yaml#/components/schemas/UserIdString'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/Org.yaml#/components/schemas/OrgContactUser'
+      security:
+      - api_token: []
+      summary: Update org contact user
+      tags:
+      - Org
+      x-okta-request-body-name: orgContactUser
+  /api/v1/org/privacy/oktaSupport:
+    get:
+      description: Gets Okta Support Settings of your organization.
+      operationId: getOrgOktaSupportSettings
+      parameters: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/Org.yaml#/components/schemas/OrgOktaSupportSettingsObj'
+      security:
+      - api_token: []
+      summary: Get Okta Support settings
+      tags:
+      - Org
+  /api/v1/org/privacy/oktaSupport/grant:
+    post:
+      description: Enables you to temporarily allow Okta Support to access your org as an
+        administrator for eight hours.
+      operationId: grantOktaSupport
+      parameters: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/Org.yaml#/components/schemas/OrgOktaSupportSettingsObj'
+      security:
+      - api_token: []
+      summary: Grant Okta Support
+      tags:
+      - Org
+  /api/v1/org/privacy/oktaSupport/extend:
+    post:
+      description: Extends the length of time that Okta Support can access your org by 24
+        hours. This means that 24 hours are added to the remaining access time.
+      operationId: extendOktaSupport
+      parameters: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/Org.yaml#/components/schemas/OrgOktaSupportSettingsObj'
+      security:
+      - api_token: []
+      summary: Extend Okta Support
+      tags:
+      - Org
+  /api/v1/org/privacy/oktaSupport/revoke:
+    post:
+      description: Revokes Okta Support access to your organization.
+      operationId: revokeOktaSupport
+      parameters: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/Org.yaml#/components/schemas/OrgOktaSupportSettingsObj'
+      security:
+      - api_token: []
+      summary: Extend Okta Support
+      tags:
+      - Org
+  /api/v1/org/privacy/oktaCommunication:
+    get:
+      description: Gets Okta Communication Settings of your organization.
+      operationId: getOktaCommunicationSettings
+      parameters: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/Org.yaml#/components/schemas/OrgOktaCommunicationSetting'
+      security:
+       - api_token: []
+      summary: Get Okta Communication Settings
+      tags:
+      - Org
+  /api/v1/org/privacy/oktaCommunication/optOut:
+    post:
+      description: Opts out all users of this org from Okta Communication emails.
+      operationId: optOutUsersFromOktaCommunicationEmails
+      parameters: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+               $ref: '../../components/Org.yaml#/components/schemas/OrgOktaCommunicationSetting'
+      security:
+      - api_token: []
+      summary: Opt out all users from Okta Communication emails
+      tags:
+      - Org
+  /api/v1/org/privacy/oktaCommunication/optIn:
+    post:
+      description: Opts in all users of this org to Okta Communication emails.
+      operationId: optInUsersToOktaCommunicationEmails
+      parameters: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/Org.yaml#/components/schemas/OrgOktaCommunicationSetting'
+      security:
+      - api_token: []
+      summary: Opt in all users to Okta Communication emails
+      tags:
+      - Org
+  /api/v1/org/preferences:
+    get:
+      description: Gets preferences of your organization.
+      operationId: getOrgPreferences
+      parameters: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/Org.yaml#/components/schemas/OrgPreferences'
+      security:
+      - api_token: []
+      summary: Get org preferences
+      tags:
+      - Org
+  /api/v1/org/preferences/showEndUserFooter:
+    post:
+      description: Makes the Okta UI footer visible for all end users of your organization.
+      operationId: showOktaUIFooter
+      parameters: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/Org.yaml#/components/schemas/OrgPreferences'
+      security:
+      - api_token: []
+      summary: Show Okta UI Footer
+      tags:
+      - Org
+  /api/v1/org/preferences/hideEndUserFooter:
+    post:
+      description: Hide the Okta UI footer for all end users of your organization.
+      operationId: hideOktaUIFooter
+      parameters: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/Org.yaml#/components/schemas/OrgPreferences'
+      security:
+      - api_token: []
+      summary: Show Okta UI Footer
+      tags:
+      - Org
+components:
+  securitySchemes:
+    api_token:
+      type: apiKey
+      description: SSWS {API Token}
+      name: Authorization
+      in: header

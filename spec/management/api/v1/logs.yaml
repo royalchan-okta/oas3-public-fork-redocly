@@ -1,0 +1,65 @@
+openapi: 3.0.1
+info:
+  title: Logs API
+  description: Logs API
+  version: 1.0.0
+paths:
+  /api/v1/logs:
+    get:
+      tags:
+      - Log
+      summary: Fetch a list of events from your Okta organization system log.
+      description: "The Okta System Log API provides read access to your organization\u2019\
+        s system log. This API provides more functionality than the Events API"
+      operationId: getLogs
+      parameters:
+      - name: since
+        in: query
+        schema:
+          type: string
+          format: date-time
+      - name: until
+        in: query
+        schema:
+          type: string
+          format: date-time
+      - name: filter
+        in: query
+        schema:
+          type: string
+      - name: q
+        in: query
+        schema:
+          type: string
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          default: 100
+      - name: sortOrder
+        in: query
+        schema:
+          type: string
+          default: ASCENDING
+      - name: after
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '../../components/Log.yaml#/components/schemas/LogEvent'
+      security:
+      - api_token: []
+components:
+  securitySchemes:
+    api_token:
+      type: apiKey
+      description: SSWS {API Token}
+      name: Authorization
+      in: header

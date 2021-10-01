@@ -1,0 +1,84 @@
+openapi: 3.0.1
+info:
+  title: Authenticator Components
+  version: 1.0.0
+paths: {}
+components:
+  schemas:
+    Authenticator:
+      properties:
+        _links:
+          additionalProperties:
+            type: object
+          readOnly: true
+          type: object
+        created:
+          format: date-time
+          readOnly: true
+          type: string
+        id:
+          readOnly: true
+          type: string
+        key:
+          type: string
+        status:
+          $ref: '#/components/schemas/AuthenticatorStatus'
+        lastUpdated:
+          format: date-time
+          readOnly: true
+          type: string
+        name:
+          type: string
+        type:
+          $ref: '#/components/schemas/AuthenticatorType'
+        settings:
+          $ref: '#/components/schemas/AuthenticatorSettings'
+      type: object
+      x-okta-operations:
+        - alias: activate
+          arguments:
+            - dest: authenticatorId
+              src: id
+          operationId: activateAuthenticator
+        - alias: deactivate
+          arguments:
+            - dest: authenticatorId
+              src: id
+          operationId: deactivateAuthenticator
+      x-okta-tags:
+        - Authenticator
+    AuthenticatorSettings:
+      properties:
+        allowedFor:
+          $ref: '#/components/schemas/AllowedForEnum'
+        tokenLifetimeInMinutes:
+          type: integer
+      type: object
+      x-okta-tags:
+        - Authenticator
+    AuthenticatorStatus:
+      enum:
+        - ACTIVE
+        - INACTIVE
+      type: string
+      x-okta-tags:
+        - Authenticator
+    AuthenticatorType:
+      enum:
+        - password
+        - security_question
+        - phone
+        - email
+        - security_key
+      type: string
+      x-okta-tags:
+        - Authenticator
+    AllowedForEnum:
+      enum:
+        - recovery
+        - sso
+        - any
+        - none
+      type: string
+      x-okta-tags:
+        - Authenticator

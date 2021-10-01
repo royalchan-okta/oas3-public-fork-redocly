@@ -1,0 +1,816 @@
+openapi: 3.0.1
+info:
+  title: Groups API
+  description: Groups API
+  version: 1.0.0
+paths:
+  /api/v1/groups:
+    get:
+      tags:
+      - Group
+      summary: List Groups
+      description: Enumerates groups in your organization with pagination. A subset
+        of groups can be returned that match a supported filter expression or query.
+      operationId: listGroups
+      parameters:
+      - name: q
+        in: query
+        description: Searches the name property of groups for matching value
+        schema:
+          type: string
+      - name: search
+        in: query
+        description: Filter expression for groups
+        schema:
+          type: string
+      - name: after
+        in: query
+        description: Specifies the pagination cursor for the next page of groups
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Specifies the number of group results in a page
+        schema:
+          type: integer
+          format: int32
+          default: 10000
+      - name: expand
+        in: query
+        description: If specified, it causes additional metadata to be included in
+          the response.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '../../components/Group.yaml#/components/schemas/Group'
+      security:
+      - api_token: []
+    post:
+      tags:
+      - Group
+      summary: Add Group
+      description: Adds a new group with `OKTA_GROUP` type to your organization.
+      operationId: createGroup
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '../../components/Group.yaml#/components/schemas/Group'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/Group.yaml#/components/schemas/Group'
+      security:
+      - api_token: []
+      x-okta-request-body-name: group
+  /api/v1/groups/rules:
+    get:
+      tags:
+      - Group
+      summary: List Group Rules
+      description: Lists all group rules for your organization.
+      operationId: listGroupRules
+      parameters:
+      - name: limit
+        in: query
+        description: Specifies the number of rule results in a page
+        schema:
+          type: integer
+          format: int32
+          default: 50
+      - name: after
+        in: query
+        description: Specifies the pagination cursor for the next page of rules
+        schema:
+          type: string
+      - name: search
+        in: query
+        description: Specifies the keyword to search fules for
+        schema:
+          type: string
+      - name: expand
+        in: query
+        description: If specified as `groupIdToGroupNameMap`, then show group names
+        schema:
+          type: string
+        x-okta-added-version: 1.3.0
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '../../components/GroupRule.yaml#/components/schemas/GroupRule'
+      security:
+      - api_token: []
+    post:
+      tags:
+      - Group
+      summary: Create Group Rule
+      description: Creates a group rule to dynamically add users to the specified
+        group if they match the condition
+      operationId: createGroupRule
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '../../components/GroupRule.yaml#/components/schemas/GroupRule'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/GroupRule.yaml#/components/schemas/GroupRule'
+      security:
+      - api_token: []
+      x-okta-request-body-name: groupRule
+  /api/v1/groups/rules/{ruleId}:
+    get:
+      tags:
+      - Group
+      summary: Get Group Rule
+      description: Fetches a specific group rule by id from your organization
+      operationId: getGroupRule
+      parameters:
+      - name: ruleId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: expand
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/GroupRule.yaml#/components/schemas/GroupRule'
+      security:
+      - api_token: []
+    put:
+      tags:
+      - Group
+      description: Updates a group rule. Only `INACTIVE` rules can be updated.
+      operationId: updateGroupRule
+      parameters:
+      - name: ruleId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '../../components/GroupRule.yaml#/components/schemas/GroupRule'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/GroupRule.yaml#/components/schemas/GroupRule'
+      security:
+      - api_token: []
+      x-okta-request-body-name: groupRule
+    delete:
+      tags:
+      - Group
+      summary: Delete a group Rule
+      description: Removes a specific group rule by id from your organization
+      operationId: deleteGroupRule
+      parameters:
+      - name: ruleId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: removeUsers
+        in: query
+        description: Indicates whether to keep or remove users from groups assigned
+          by this rule.
+        schema:
+          type: boolean
+      responses:
+        '202':
+          description: Accepted
+          content: {}
+      security:
+      - api_token: []
+  /api/v1/groups/rules/{ruleId}/lifecycle/activate:
+    post:
+      tags:
+      - Group
+      summary: Activate a group Rule
+      description: Activates a specific group rule by id from your organization
+      operationId: activateGroupRule
+      parameters:
+      - name: ruleId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: No Content
+          content: {}
+      security:
+      - api_token: []
+  /api/v1/groups/rules/{ruleId}/lifecycle/deactivate:
+    post:
+      tags:
+      - Group
+      summary: Deactivate a group Rule
+      description: Deactivates a specific group rule by id from your organization
+      operationId: deactivateGroupRule
+      parameters:
+      - name: ruleId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: No Content
+          content: {}
+      security:
+      - api_token: []
+  /api/v1/groups/{groupId}:
+    get:
+      tags:
+      - Group
+      summary: List Group Rules
+      description: Fetches a group from your organization.
+      operationId: getGroup
+      parameters:
+      - name: groupId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/Group.yaml#/components/schemas/Group'
+      security:
+      - api_token: []
+    put:
+      tags:
+      - Group
+      summary: Update Group
+      description: Updates the profile for a group with `OKTA_GROUP` type from your
+        organization.
+      operationId: updateGroup
+      parameters:
+      - name: groupId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '../../components/Group.yaml#/components/schemas/Group'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/Group.yaml#/components/schemas/Group'
+      security:
+      - api_token: []
+      x-okta-request-body-name: group
+    delete:
+      tags:
+      - Group
+      summary: Remove Group
+      description: Removes a group with `OKTA_GROUP` type from your organization.
+      operationId: deleteGroup
+      parameters:
+      - name: groupId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: No Content
+          content: {}
+      security:
+      - api_token: []
+  /api/v1/groups/{groupId}/apps:
+    get:
+      tags:
+      - Group
+      summary: List Assigned Applications
+      description: Enumerates all applications that are assigned to a group.
+      operationId: listAssignedApplicationsForGroup
+      parameters:
+      - name: groupId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: after
+        in: query
+        description: Specifies the pagination cursor for the next page of apps
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Specifies the number of app results for a page
+        schema:
+          type: integer
+          format: int32
+          default: 20
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '../../components/Application.yaml#/components/schemas/Application'
+      security:
+      - api_token: []
+  /api/v1/groups/{groupId}/roles:
+    get:
+      tags:
+      - Group
+      description: Success
+      operationId: listGroupAssignedRoles
+      parameters:
+      - name: groupId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: expand
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '../../components/User.yaml#/components/schemas/Role'
+      security:
+      - api_token: []
+    post:
+      tags:
+      - Group
+      description: Assigns a Role to a Group
+      operationId: assignRoleToGroup
+      parameters:
+      - name: groupId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: disableNotifications
+        in: query
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '../../components/Role.yaml#/components/schemas/AssignRoleRequest'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/User.yaml#/components/schemas/Role'
+        '201':
+          description: Success
+          content: {}
+      security:
+      - api_token: []
+      x-okta-request-body-name: assignRoleRequest
+  /api/v1/groups/{groupId}/roles/{roleId}:
+    get:
+      tags:
+      - Group
+      description: Success
+      operationId: getRole
+      parameters:
+      - name: groupId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: roleId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/User.yaml#/components/schemas/Role'
+      security:
+      - api_token: []
+    delete:
+      tags:
+      - Group
+      description: Unassigns a Role from a Group
+      operationId: removeRoleFromGroup
+      parameters:
+      - name: groupId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: roleId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: No Content
+          content: {}
+      security:
+      - api_token: []
+  /api/v1/groups/{groupId}/roles/{roleId}/targets/catalog/apps:
+    get:
+      tags:
+      - Group
+      description: Lists all App targets for an `APP_ADMIN` Role assigned to a Group.
+        This methods return list may include full Applications or Instances. The response
+        for an instance will have an `ID` value, while Application will not have an
+        ID.
+      operationId: listApplicationTargetsForApplicationAdministratorRoleForGroup
+      parameters:
+      - name: groupId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: roleId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: after
+        in: query
+        schema:
+          type: string
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 20
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '../../components/Role.yaml#/components/schemas/CatalogApplication'
+      security:
+      - api_token: []
+  /api/v1/groups/{groupId}/roles/{roleId}/targets/catalog/apps/{appName}:
+    put:
+      tags:
+      - Group
+      description: Success
+      operationId: addApplicationTargetToAdminRoleGivenToGroup
+      parameters:
+      - name: groupId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: roleId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: appName
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content: {}
+      security:
+      - api_token: []
+    delete:
+      tags:
+      - Group
+      description: Success
+      operationId: removeApplicationTargetFromApplicationAdministratorRoleGivenToGroup
+      parameters:
+      - name: groupId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: roleId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: appName
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: No Content
+          content: {}
+      security:
+      - api_token: []
+  /api/v1/groups/{groupId}/roles/{roleId}/targets/catalog/apps/{appName}/{applicationId}:
+    put:
+      tags:
+      - Group
+      summary: Add App Instance Target to App Administrator Role given to a Group
+      description: Add App Instance Target to App Administrator Role given to a Group
+      operationId: addApplicationInstanceTargetToAppAdminRoleGivenToGroup
+      parameters:
+      - name: groupId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: roleId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: appName
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: applicationId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: No Content
+          content: {}
+      security:
+      - api_token: []
+    delete:
+      tags:
+      - Group
+      summary: Remove App Instance Target to App Administrator Role given to a Group
+      description: Remove App Instance Target to App Administrator Role given to a
+        Group
+      operationId: removeApplicationTargetFromAdministratorRoleGivenToGroup
+      parameters:
+      - name: groupId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: roleId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: appName
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: applicationId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: No Content
+          content: {}
+      security:
+      - api_token: []
+  /api/v1/groups/{groupId}/roles/{roleId}/targets/groups:
+    get:
+      tags:
+      - Group
+      summary: List Group Targets for Group Role
+      description: Enumerates group targets for a group role.
+      operationId: listGroupTargetsForGroupRole
+      parameters:
+      - name: groupId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: roleId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: after
+        in: query
+        schema:
+          type: string
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 20
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '../../components/Group.yaml#/components/schemas/Group'
+      security:
+      - api_token: []
+  /api/v1/groups/{groupId}/roles/{roleId}/targets/groups/{targetGroupId}:
+    put:
+      tags:
+      - Group
+      summary: Add Group Target for Group Role
+      description: Enumerates group targets for a group role.
+      operationId: addGroupTargetToGroupAdministratorRoleForGroup
+      parameters:
+      - name: groupId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: roleId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: targetGroupId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: No Content
+          content: {}
+    delete:
+      tags:
+      - Group
+      summary: Delete Group Target for Group Role
+      description: remove group target for a group role.
+      operationId: removeGroupTargetFromGroupAdministratorRoleGivenToGroup
+      parameters:
+      - name: groupId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: roleId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: targetGroupId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: No Content
+          content: {}
+  /api/v1/groups/{groupId}/users:
+    get:
+      tags:
+      - Group
+      summary: List Group Members
+      description: Enumerates all users that are a member of a group.
+      operationId: listGroupUsers
+      parameters:
+      - name: groupId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: after
+        in: query
+        description: Specifies the pagination cursor for the next page of users
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Specifies the number of user results in a page
+        schema:
+          type: integer
+          format: int32
+          default: 1000
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '../../components/User.yaml#/components/schemas/User'
+      security:
+      - api_token: []
+  /api/v1/groups/{groupId}/users/{userId}:
+    put:
+      tags:
+      - Group
+      summary: Add User to Group
+      description: Adds a user to a group with 'OKTA_GROUP' type.
+      operationId: addUserToGroup
+      parameters:
+      - name: groupId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: No Content
+          content: {}
+      security:
+      - api_token: []
+    delete:
+      tags:
+      - Group
+      summary: Remove User from Group
+      description: Removes a user from a group with 'OKTA_GROUP' type.
+      operationId: removeUserFromGroup
+      parameters:
+      - name: groupId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: No Content
+          content: {}
+      security:
+      - api_token: []
+components:
+  securitySchemes:
+    api_token:
+      type: apiKey
+      description: SSWS {API Token}
+      name: Authorization
+      in: header

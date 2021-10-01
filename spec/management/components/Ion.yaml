@@ -1,0 +1,63 @@
+openapi: 3.0.1
+info:
+  title: Ion Components
+  version: 1.0.0
+paths: {}
+components:
+  schemas:
+    IonField:
+      type: object
+      properties:
+        form:
+          $ref: '#/components/schemas/IonForm'
+        label:
+          type: string
+        mutable:
+          type: boolean
+        name:
+          type: string
+        required:
+          type: boolean
+        secret:
+          type: boolean
+        type:
+          type: string
+        value:
+          type: object
+          additionalProperties:
+            type: object
+            properties: {}
+        visible:
+          type: boolean
+      x-okta-tags:
+      - Ion
+    IonForm:
+      type: object
+      properties:
+        accepts:
+          type: string
+        href:
+          type: string
+        method:
+          type: string
+        name:
+          type: string
+        produces:
+          type: string
+        refresh:
+          type: integer
+        rel:
+          type: array
+          items:
+            type: string
+        relatesTo:
+          type: array
+          items:
+            type: string
+        value:
+          type: array
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/IonField'
+      x-okta-tags:
+      - Ion

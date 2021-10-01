@@ -1,0 +1,373 @@
+openapi: 3.0.1
+info:
+  title: Captchas API
+  description: Captchas API
+  version: 1.0.0
+paths:
+  /api/v1/captchas:
+    get:
+      summary: List CAPTCHA instances
+      tags:
+      - CAPTCHA
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '../../components/CAPTCHA.yaml#/components/schemas/CAPTCHAInstance'
+              examples:
+                Get all CAPTCHA instances:
+                  value:
+                  - id: abcd1234
+                    name: myHCaptcha
+                    siteKey: xxxxxxxxxxx
+                    type: HCAPTCHA
+                    _link:
+                      self:
+                        href: https://your-subdomain.okta.com/api/v1/captchas/abcd1234
+                        hints:
+                          allow:
+                          - GET
+                          - POST
+                          - PUT
+                          - DELETE
+                  - id: abcd4567
+                    name: myReCaptcha
+                    siteKey: yyyyyyyyyyyyyyy
+                    type: RECAPTCHA_V2
+                    _link:
+                      self:
+                        href: https://your-subdomain.okta.com/api/v1/captchas/abcd4567
+                        hints:
+                          allow:
+                          - GET
+                          - POST
+                          - PUT
+                          - DELETE
+      operationId: listCaptchaInstances
+      description: Enumerates CAPTCHA instances in your organization with pagination.
+        A subset of CAPTCHA instances can be returned that match a supported filter
+        expression or query.
+      parameters: []
+      security:
+      - api_token: []
+      - oauth2: [okta.captchas.read]
+    post:
+      summary: Create new CAPTCHA instance
+      operationId: createCaptchaInstance
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/CAPTCHA.yaml#/components/schemas/CAPTCHAInstance'
+              examples:
+                example-1:
+                  value:
+                    id: abcd1234
+                    name: myHCaptcha
+                    siteKey: xxxxxxxxxxx
+                    type: HCAPTCHA
+                    _link:
+                      self:
+                        href: https://your-subdomain.okta.com/api/v1/captchas/abcd1234
+                        hints:
+                          allow:
+                          - GET
+                          - POST
+                          - PUT
+                          - DELETE
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/Common.yaml#/components/schemas/Error'
+              examples:
+                There's already a CAPTCHA instance:
+                  value:
+                    errorCode: E0000165
+                    errorSummary: CAPTCHA count limit reached. At most one CAPTCHA
+                      instance is allowed per Org.
+                    errorLink: E0000165
+                    errorId: oaejrB1fWL1S7mc-2KcG-SOtw
+                    errorCauses: []
+      description: Adds a new CAPTCHA instance to your organization. In current
+        release, we only allow one CAPTCHA instance per org.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '../../components/CAPTCHA.yaml#/components/schemas/CAPTCHAInstance'
+            examples:
+              example-1:
+                value:
+                  name: myHCaptcha
+                  secretKey: xxxxxxxxxxx
+                  siteKey: xxxxxxxxxxx
+                  type: HCAPTCHA
+      tags:
+      - CAPTCHA
+      security:
+      - api_token: []
+      - oauth2: [okta.captchas.manage]
+      x-okta-request-body-name: instance
+  /api/v1/captchas/{captchaId}:
+    parameters:
+    - schema:
+        type: string
+        example: abcd1234
+      name: captchaId
+      in: path
+      required: true
+      description: id of the CAPTCHA
+    get:
+      summary: Get CAPTCHA Instance
+      tags:
+      - CAPTCHA
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/CAPTCHA.yaml#/components/schemas/CAPTCHAInstance'
+              examples:
+                example-1:
+                  value:
+                    id: abcd1234
+                    name: myHCaptcha
+                    siteKey: xxxxxxxxxxx
+                    type: HCAPTCHA
+                    _link:
+                      self:
+                        href: https://your-subdomain.okta.com/api/v1/captchas/abcd1234
+                        hints:
+                          allow:
+                          - GET
+                          - POST
+                          - PUT
+                          - DELETE
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/Common.yaml#/components/schemas/Error'
+              examples:
+                example-1:
+                  value:
+                    errorCode: E0000007
+                    errorSummary: 'Not found: {0}'
+                    errorLink: E0000007
+                    errorId: sampleMlLvGUj_YD5v16vkYWY
+                    errorCauses: []
+      operationId: getCaptchaInstance
+      description: Fetches a CAPTCHA instance by `id`.
+      security:
+      - api_token: []
+      - oauth2: [okta.captchas.read]
+    put:
+      summary: Update CAPTCHA instance
+      operationId: updateCaptchaInstance
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/CAPTCHA.yaml#/components/schemas/CAPTCHAInstance'
+              examples:
+                example-1:
+                  value:
+                    id: abcd1234
+                    name: myHCaptcha
+                    siteKey: xxxxxxxxxxx
+                    type: HCAPTCHA
+                    _link:
+                      self:
+                        href: https://your-subdomain.okta.com/api/v1/captchas/abcd1234
+                        hints:
+                          allow:
+                          - GET
+                          - POST
+                          - PUT
+                          - DELETE
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/Common.yaml#/components/schemas/Error'
+              examples:
+                example-1:
+                  value:
+                    errorCode: E0000001
+                    errorSummary: 'Api validation failed: {0}'
+                    errorLink: E0000001
+                    errorId: sampleiCF-8D5rLW6myqiPItW
+                    errorCauses: []
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/Common.yaml#/components/schemas/Error'
+              examples:
+                example-1:
+                  value:
+                    errorCode: E0000007
+                    errorSummary: 'Not found: {0}'
+                    errorLink: E0000007
+                    errorId: sampleMlLvGUj_YD5v16vkYWY
+                    errorCauses: []
+      description: Update a CAPTCHA instance by `id`.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '../../components/CAPTCHA.yaml#/components/schemas/CAPTCHAInstance'
+            examples:
+              example-1:
+                value:
+                  name: myHCaptcha
+                  secretKey: xxxxxxxxxxx
+                  siteKey: xxxxxxxxxxx
+                  type: HCAPTCHA
+        description: ''
+        required: true
+      tags:
+      - CAPTCHA
+      security:
+      - api_token: []
+      - oauth2: [okta.captchas.manage]
+      x-okta-request-body-name: instance
+    delete:
+      summary: Delete CAPTCHA Instance
+      operationId: deleteCaptchaInstance
+      responses:
+        '204':
+          description: No Content
+        '403':
+          description: Forbidden
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/Common.yaml#/components/schemas/Error'
+              examples:
+                OrgWideAssociate:
+                  value:
+                    errorCode: E0000149
+                    errorSummary: Current CAPTCHA is associated with org-wide settings,
+                      cannot be removed.
+                    errorLink: E0000149
+                    errorId: samplezsusshPdiTWiITwqBt8
+                    errorCauses: []
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/Common.yaml#/components/schemas/Error'
+              examples:
+                example-1:
+                  value:
+                    errorCode: E0000007
+                    errorSummary: 'Not found: {0}'
+                    errorLink: E0000007
+                    errorId: sampleMlLvGUj_YD5v16vkYWY
+                    errorCauses: []
+      description: Delete a CAPTCHA instance by `id`.
+      tags:
+      - CAPTCHA
+      security:
+      - api_token: []
+      - oauth2: [okta.captchas.manage]
+    post:
+      summary: Partial Update CAPTCHA instance
+      operationId: partialUpdateCaptchaInstance
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/CAPTCHA.yaml#/components/schemas/CAPTCHAInstance'
+              examples:
+                example-1:
+                  value:
+                    id: abcd1234
+                    name: myHCaptcha
+                    siteKey: xxxxxxxxxxx
+                    type: HCAPTCHA
+                    _link:
+                      self:
+                        href: https://your-subdomain.okta.com/api/v1/captchas/abcd1234
+                        hints:
+                          allow:
+                          - GET
+                          - POST
+                          - PUT
+                          - DELETE
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/Common.yaml#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '../../components/Common.yaml#/components/schemas/Error'
+              examples:
+                example-1:
+                  value:
+                    errorCode: E0000007
+                    errorSummary: 'Not found: {0}'
+                    errorLink: E0000007
+                    errorId: sampleMlLvGUj_YD5v16vkYWY
+                    errorCauses: []
+      description: Partially update a CAPTCHA instance by `id`.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '../../components/CAPTCHA.yaml#/components/schemas/CAPTCHAInstance'
+            examples:
+              example-1:
+                value:
+                  name: myHCaptcha
+                  siteKey: xxxxxxxxxxx
+                  type: HCAPTCHA
+        description: ''
+        required: true
+      tags:
+      - CAPTCHA
+      security:
+      - api_token: []
+      - oauth2: [okta.captchas.manage]
+      x-okta-request-body-name: instance
+components:
+  securitySchemes:
+    api_token:
+      description: SSWS {API Token}
+      name: Authorization
+      type: apiKey
+      in: header
+    oauth2:
+      type: oauth2
+      description: Pass the access_token as the value of the Authorization header
+      flows: 
+        authorizationCode:
+          authorizationUrl: /oauth2/v1/authorize
+          tokenUrl: /oauth2/v1/token
+          scopes:
+            okta.captchas.manage: Read or modify catpcha instances in your org.
+            okta.captchas.read: Read catpcha instances in your org.
