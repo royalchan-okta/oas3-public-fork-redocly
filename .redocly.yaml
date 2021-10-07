@@ -1,0 +1,13 @@
+referenceDocs:
+  pagination: section
+  showConsole: true
+  colors:
+    primary:
+      main: '#1d1d21'
+  theme:
+    menu:
+      backgroundColor: '#000'
+
+lint:
+  extends:
+  - minimal
