@@ -1,5 +1,5 @@
-<ApiLifecycle access="ie" /><br>
-<ApiLifecycle access="Limited GA" /><br>
+![OIE](oie.png)
+![LGA](lga.png)
 
 > **Note:** This feature is only available as a part of Okta Identity Engine. [Contact support](mailto:dev-inquiries@okta.com) for further information.
 
@@ -9,17 +9,10 @@ The vendor implementations supported by Okta are both invisible. They each run r
 
 The Okta CAPTCHAs API provides operations to manage CAPTCHAs and Org-wide CAPTCHA Settings.
 
-* [Delets?](#operation/deleteCaptchaInstance)
+* [Link to DELETE operation](#operation/deleteCaptchaInstance)
 
 ## Get started
 
 Before you configure your org to use CAPTCHA, sign in to the vendor of your choice or sign up for an account. For more details, refer to [CAPTCHA integration](https://help.okta.com/okta_help.htm?type=oie&id=csh-captcha).
 
 Explore the CAPTCHAs API: [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/c51413d80cc8e88fd101?action=collection%2Fimport)
-
-# CAPTCHA operations
-
-
-# Org-wide CAPTCHA Settings operations
-
-TBD here
