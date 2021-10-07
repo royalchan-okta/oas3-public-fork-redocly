@@ -15157,6 +15157,7 @@ components:
       - UserType
 tags:
 - name: Application
+  description: Some Application Description
 - name: Authenticator
 - name: AuthorizationServer
 - name: AuthorizationServerPolicy
