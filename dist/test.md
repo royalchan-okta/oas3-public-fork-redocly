@@ -1,5 +1,4 @@
-![OIE](oie.png)
-![LGA](lga.png)
+![LGA](https://i.imgur.com/3HZpWHE.png)
 
 > **Note:** This feature is only available as a part of Okta Identity Engine. [Contact support](mailto:dev-inquiries@okta.com) for further information.
 
