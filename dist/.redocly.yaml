@@ -3,7 +3,7 @@ referenceDocs:
   showConsole: true
   colors: {
       primary: {
-        main: '#6EC5AB',
+        main: '#1d1d21',
       }
     },
   theme:
