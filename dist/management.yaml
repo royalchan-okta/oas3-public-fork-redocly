@@ -15188,3 +15188,14 @@ tags:
 - name: UserFactor
 - name: UserSchema
 - name: UserType
+x-tagGroups:
+  - name: Users
+    tags:
+      - User
+      - UserSchema
+      - UserType
+  - name: Groups
+    tags:
+      - Group
+      - GroupSchema
+      - UserType
