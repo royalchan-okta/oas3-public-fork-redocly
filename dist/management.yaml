@@ -15199,3 +15199,31 @@ x-tagGroups:
       - Group
       - GroupSchema
       - UserType
+  - name: Security-ish
+    tags:
+      - Authenticator
+      - CAPTCHA
+      - UserFactor
+  - name: Other
+      - Application
+      - AuthorizationServer
+      - AuthorizationServerPo
+      - Common
+      - Domain
+      - EventHook
+      - Feature
+      - GroupRule
+      - IdentityProvider
+      - InlineHook
+      - Ion
+      - LinkedObject
+      - Log
+      - NetworkZone
+      - Org
+      - Policy
+      - ProfileMapping
+      - Role
+      - Session
+      - Template
+      - ThreatInsight
+      - TrustedOrigin
