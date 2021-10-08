@@ -15191,39 +15191,40 @@ tags:
 x-tagGroups:
   - name: Users
     tags:
-      - User
-      - UserSchema
-      - UserType
+    - User
+    - UserSchema
+    - UserType
   - name: Groups
     tags:
-      - Group
-      - GroupSchema
-      - UserType
+    - Group
+    - GroupSchema
+    - UserType
   - name: Security-ish
     tags:
       - Authenticator
       - CAPTCHA
       - UserFactor
   - name: Other
-      - Application
-      - AuthorizationServer
-      - AuthorizationServerPo
-      - Common
-      - Domain
-      - EventHook
-      - Feature
-      - GroupRule
-      - IdentityProvider
-      - InlineHook
-      - Ion
-      - LinkedObject
-      - Log
-      - NetworkZone
-      - Org
-      - Policy
-      - ProfileMapping
-      - Role
-      - Session
-      - Template
-      - ThreatInsight
-      - TrustedOrigin
+    tags:
+    - Application
+    - AuthorizationServer
+    - AuthorizationServerPo
+    - Common
+    - Domain
+    - EventHook
+    - Feature
+    - GroupRule
+    - IdentityProvider
+    - InlineHook
+    - Ion
+    - LinkedObject
+    - Log
+    - NetworkZone
+    - Org
+    - Policy
+    - ProfileMapping
+    - Role
+    - Session
+    - Template
+    - ThreatInsight
+    - TrustedOrigin
