@@ -19,7 +19,23 @@ externalDocs:
   description: Find more info here
   url: https://developer.okta.com/docs/api/getting_started/design_principles.html
 servers:
-- url: https://your-subdomain.okta.com
+- url: https://{subdomain}.{domain}
+  variables:
+    subdomain:
+      default: your-subdomain
+      description: The subdomain of your organization
+    domain:
+      enum:
+      - okta.com
+      - oktapreview.com
+      - okta-emea.com
+      default: okta.com
+      description: The okta domain of your organization.
+- url: https://{customDomain}
+  variables:
+    customDomain:
+      default: auth.your-company.com
+      description: The custom domain configured for your organization
 paths:
   /api/v1/apps:
     get:
