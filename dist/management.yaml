@@ -2167,6 +2167,10 @@ paths:
       operationId: listCaptchaInstances
       description: Enumerates CAPTCHA instances in your organization with pagination. A subset of CAPTCHA instances can be returned that match a supported filter expression or query.
       parameters: []
+      x-codeSamples:
+      - lang: 'fake Python'
+        source:
+          $ref: fake.py
       security:
       - api_token: []
       - oauth2:
