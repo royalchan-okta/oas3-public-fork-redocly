@@ -7,6 +7,12 @@ referenceDocs:
   theme:
     menu:
       backgroundColor: '#f5f5f6'
+  generateCodeSamples:
+    languages:
+      - lang: curl
+        label: Oldschool cURL
+      - lang: Python
+      - lang: JavaScript
 
 lint:
   extends:

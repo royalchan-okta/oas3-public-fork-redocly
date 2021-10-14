@@ -34,7 +34,7 @@ servers:
 - url: https://{customDomain}
   variables:
     customDomain:
-      default: auth.your-company.com
+      default: auth.your-custom-domain.com
       description: The custom domain configured for your organization
 paths:
   /api/v1/apps:
